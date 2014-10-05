@@ -4,6 +4,12 @@
 
 {% block content %}
 	<h1> TEST H1 </h1>
+
+    {% if user.is_authenticated %}
+        <h1>hello {{ user.username }}!</h1>
+    {% else %}
+        <h1>hello world!</h1>
+    {% endif %}
 	<p>Nulla turpis, bibendum mi posuere, ultrices primis turpis aptent ridiculus.</p>
 
 	<p>Etiam interdum rhoncus. Proin mollis montes id lorem rutrum.</p>
