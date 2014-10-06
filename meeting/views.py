@@ -10,6 +10,9 @@ def index(request):
         # now return the rendered template
         return render(request, 'meeting/index.html')
 
+def about(request):
+    return render(request, 'meeting/about.html')
+
 def register(request):
     context = RequestContext(request)
     registered = False

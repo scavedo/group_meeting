@@ -10,4 +10,5 @@ urlpatterns = patterns('',
     url(r'^register/$', 'meeting.views.register', name='register'),
     url(r'^login/$', 'meeting.views.user_login', name='login'),
     url(r'^logout/$', 'meeting.views.user_logout', name='logout'),
+    url(r'^about/$', 'meeting.views.about', name='about'),
 )
