@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from meeting.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
@@ -6,9 +6,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def index(request):
-        # now return the rendered template
-        return render(request, 'meeting/index.html')
+    # now return the rendered template
+    return render(request, 'meeting/index.html')
 
 def about(request):
     return render(request, 'meeting/about.html')
