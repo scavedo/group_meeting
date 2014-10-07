@@ -45,7 +45,7 @@ class Files(models.Model):
         return self.title
 
 
-class Calendar(models.Model):
+class Meeting(models.Model):
     project = models.ForeignKey('Project')
     date_added = models.DateTimeField()
     date_begin = models.DateTimeField()
