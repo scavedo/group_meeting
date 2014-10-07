@@ -3,16 +3,50 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-	<h1>Index</h1>
-
-    {% if user.is_authenticated %}
-        <h1>hello {{ user.username }}!</h1>
-    {% else %}
-        <h1>hello world!</h1>
-    {% endif %}
-	<p>Nulla turpis, bibendum mi posuere, ultrices primis turpis aptent ridiculus.</p>
-
-	<p>Etiam interdum rhoncus. Proin mollis montes id lorem rutrum.</p>
-
-	<p>Quam pulvinar lacinia ante pretium facilisi mus placerat senectus ipsum commodo.</p>
+    <div class="container well">
+        <h1>Project Name</h1>
+        <br />
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="tabbable" id="tabs-158749">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#panel-1" data-toggle="tab">Home</a>
+                        </li>
+                        <li>
+                            <a href="#panel-2" data-toggle="tab">Notes</a>
+                        </li>
+                        <li>
+                            <a href="#panel-3" data-toggle="tab">Files</a>
+                        </li>
+                        <li>
+                            <a href="#panel-4" data-toggle="tab">Calendar</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="panel-1">
+                            <p>
+                                Recent Activity
+                            </p>
+                        </div>
+                        <div class="tab-pane" id="panel-2">
+                            <p>
+                                Notes
+                            </p>
+                        </div>
+                        <div class="tab-pane" id="panel-3">
+                            <p>
+                                Files
+                            </p>
+                        </div>
+                        <div class="tab-pane" id="panel-4">
+                            <p>
+                                Calendar
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

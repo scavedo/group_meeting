@@ -3,7 +3,6 @@
 {% load static %}
 
 {% block styles %}
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -11,7 +10,7 @@
         {% if registered %}
         <p>Thank you for registering.</p>
 
-        <p><a href="/login/">Login</a> when you are ready to rango.</p>
+        <p><a href="/login/">Login</a> to log in to Group Meeting</p>
         {% else %}
         <form class="form-signin span8" id="user_form" method="post" action="/register/"
               enctype="multipart/form-data">
@@ -22,13 +21,13 @@
             {% for field in user_form.visible_fields %}
             {{ field.errors }}
             {{ field.help_text }}<br />
-            {{ field | addcss:"form-control"}}<br />
+            {{ field | addcss:"form-control" }}<br />
             {% endfor %}
 
             {% for field in profile_form.visible_fields %}
             {{ field.errors }}
             {{ field.help_text }}<br />
-            {{ field | addcss:"form-control"}}<br />
+            {{ field | addcss:"form-control" }}<br />
             {% endfor %}
 
             <br />

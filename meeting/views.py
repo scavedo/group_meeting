@@ -1,9 +1,10 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from meeting.forms import UserForm, UserProfileForm
+from meeting.forms import UserForm, UserProfileForm, ProjectForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 @login_required(login_url='/login/')
@@ -11,8 +12,10 @@ def index(request):
     # now return the rendered template
     return render(request, 'meeting/index.html')
 
+
 def about(request):
     return render(request, 'meeting/about.html')
+
 
 def register(request):
     context = RequestContext(request)
@@ -41,6 +44,7 @@ def register(request):
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
             context)
 
+
 def user_login(request):
     context = RequestContext(request)
     if request.method == 'POST':
@@ -52,14 +56,30 @@ def user_login(request):
                 login(request, user)
                 return HttpResponseRedirect('/')
             else:
-                return HttpResponse("Your Rango account is disabled.")
+                return HttpResponse("Your account is disabled.")
         else:
             print "Invalid login details: {0}, {1}".format(username, password)
             return HttpResponse("Invalid login details supplied.")
     else:
         return render_to_response('meeting/login.html', {}, context)
 
+
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+
+@login_required(login_url='/login/')
+def create_project(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = ProjectForm()
+    return render_to_response('meeting/create-project.html', {'form': form}, context)
