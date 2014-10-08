@@ -25,24 +25,16 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="panel-1">
-                            <p>
-                                Recent Activity
-                            </p>
+                            {% include 'meeting/project-home.html' %}
                         </div>
                         <div class="tab-pane" id="panel-2">
-                            <p>
-                                Notes
-                            </p>
+                            {% include 'meeting/notes.html' %}
                         </div>
                         <div class="tab-pane" id="panel-3">
-                            <p>
-                                Files
-                            </p>
+                            {% include 'meeting/files.html' %}
                         </div>
                         <div class="tab-pane" id="panel-4">
-                            <p>
-                                Calendar
-                            </p>
+                            {% include 'meeting/calendar.html' %}
                         </div>
                     </div>
                 </div>
