@@ -1,5 +1,5 @@
 from django.contrib import admin
-from meeting.models import UserProfile, Project, Notes, Files, Meeting
+from meeting.models import UserProfile, Project, Note, File, Meeting
 
 
 # class ProjectAdmin(admin.ModelAdmin):
@@ -8,6 +8,6 @@ from meeting.models import UserProfile, Project, Notes, Files, Meeting
 
 admin.site.register(UserProfile)
 admin.site.register(Project)
-admin.site.register(Notes)
-admin.site.register(Files)
+admin.site.register(Note)
+admin.site.register(File)
 admin.site.register(Meeting)

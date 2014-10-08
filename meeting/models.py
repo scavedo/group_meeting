@@ -19,35 +19,29 @@ class Project(models.Model):
         return self.name
 
 
-class Notes(models.Model):
-    project = models.ForeignKey('Project')
-    date_added = models.DateTimeField()
+class Note(models.Model):
+    # project = models.ForeignKey('Project')
+    # date_added = models.DateTimeField()
     title = models.CharField(max_length=128)
     content = models.TextField()
-
-    class Meta:
-        verbose_name_plural = "Notes"
 
     def __unicode__(self):
         return self.title
 
 
-class Files(models.Model):
-    project = models.ForeignKey('Project')
+class File(models.Model):
+    # project = models.ForeignKey('Project')
     title = models.CharField(max_length=128)
-    date_added = models.DateTimeField()
+    # date_added = models.DateTimeField()
     file = models.FileField(upload_to='files')
-
-    class Meta:
-        verbose_name_plural = "Files"
 
     def __unicode__(self):
         return self.title
 
 
 class Meeting(models.Model):
-    project = models.ForeignKey('Project')
-    date_added = models.DateTimeField()
+    # project = models.ForeignKey('Project')
+    # date_added = models.DateTimeField()
     date_begin = models.DateTimeField()
     date_end = models.DateTimeField()
     title = models.CharField(max_length=128)

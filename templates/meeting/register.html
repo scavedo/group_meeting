@@ -20,13 +20,13 @@
 
             {% for field in user_form.visible_fields %}
             {{ field.errors }}
-            {{ field.help_text }}<br />
+            {{ field.label_tag }}<br />
             {{ field | addcss:"form-control" }}<br />
             {% endfor %}
 
             {% for field in profile_form.visible_fields %}
             {{ field.errors }}
-            {{ field.help_text }}<br />
+            {{ field.label_tag }}<br />
             {{ field | addcss:"form-control" }}<br />
             {% endfor %}
 

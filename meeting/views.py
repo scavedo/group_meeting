@@ -1,6 +1,7 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from meeting.forms import UserForm, UserProfileForm, ProjectForm
+from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm
+from meeting.models import UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -76,10 +77,55 @@ def create_project(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
-            form.save(commit=True)
+            project = form.save(commit=False)
+            project.save()
+            project.users.add(UserProfile.objects.get(user=request.user))
+            project.save()
             return HttpResponseRedirect('/')
         else:
             print form.errors
     else:
         form = ProjectForm()
     return render_to_response('meeting/create-project.html', {'form': form}, context)
+
+
+def add_meeting(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = MeetingForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = MeetingForm()
+    return render_to_response('meeting/add-meeting.html', {'form': form}, context)
+
+
+def add_file(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = FilesForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = FilesForm()
+    return render_to_response('meeting/add-file.html', {'form': form}, context)
+
+
+def add_note(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = NotesForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = NotesForm()
+    return render_to_response('meeting/add-note.html', {'form': form}, context)

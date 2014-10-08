@@ -1,6 +1,7 @@
-from meeting.models import UserProfile, Project
+from meeting.models import UserProfile, Project, Note, File, Meeting
 from django.contrib.auth.models import User
 from django import forms
+from django.forms.extras.widgets import SelectDateWidget
 
 
 class UserForm(forms.ModelForm):
@@ -24,11 +25,39 @@ class UserProfileForm(forms.ModelForm):
 class ProjectForm(forms.ModelForm):
     name = forms.CharField(help_text="Please enter a project name.")
     # users = forms.MultipleChoiceField(widget=forms.HiddenInput())
-    # notes = forms.BooleanField(help_text="Include Notes.", initial=True)
-    # files = forms.BooleanField(help_text="Include Files.", initial=True)
-    # calendar = forms.BooleanField(help_text="Include a Calendar.", initial=True)
 
     class Meta:
         model = Project
-        # fields = ['name', 'notes', 'files', 'calendar']
         fields = ['name']
+
+
+class NotesForm(forms.ModelForm):
+    title = forms.CharField(help_text="Please enter the title of your note.")
+    content = forms.Textarea()
+
+    class Meta:
+        model = Note
+        fields = ['title', 'content']
+
+
+class FilesForm(forms.ModelForm):
+    title = forms.CharField(help_text="Please enter a title for your file.")
+    file = forms.FileField(help_text="Upload your file.")
+
+    class Meta:
+        model = File
+        fields = ['title', 'file']
+
+
+class MeetingForm(forms.ModelForm):
+    title = forms.CharField(help_text="Please enter a title for your meeting.")
+    date_begin = forms.DateTimeField(input_formats=['%m/%d/%Y %H:%M %p'])
+    date_end = forms.DateTimeField(input_formats=['%m/%d/%Y %H:%M %p'])
+    place = forms.CharField(help_text="Enter the location.")
+    description = forms.Textarea()
+
+    class Meta:
+        model = Meeting
+        fields = ['title', 'date_begin', 'date_end', 'place', 'description']
+
+

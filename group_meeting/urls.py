@@ -12,4 +12,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'meeting.views.user_logout', name='logout'),
     url(r'^about/$', 'meeting.views.about', name='about'),
     url(r'^create-project/$', 'meeting.views.create_project', name='create-project'),
+    url(r'^add-meeting/$', 'meeting.views.add_meeting', name='add-meeting'),
+    url(r'^add-file/$', 'meeting.views.add_file', name='add-file'),
+    url(r'^add-note/$', 'meeting.views.add_note', name='add-note'),
 )
