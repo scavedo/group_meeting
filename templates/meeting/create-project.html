@@ -15,7 +15,7 @@
 
             {% for field in form.visible_fields %}
                 {{ field.errors }}
-                {{ field.help_text }}
+                {{ field.label_tag }}
                 {{ field | addcss:"form-control"}}
                 <br/>
             {% endfor %}
@@ -24,5 +24,12 @@
 
             <input class="btn btn-primary" type="submit" name="submit" value="Create Project" />
         </form>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#id_due_date').datetimepicker();
+        });
+    </script>
+
     </div><!-- /container -->
 {% endblock %}

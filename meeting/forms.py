@@ -1,7 +1,6 @@
 from meeting.models import UserProfile, Project, Note, File, Meeting
 from django.contrib.auth.models import User
 from django import forms
-from django.forms.extras.widgets import SelectDateWidget
 
 
 class UserForm(forms.ModelForm):
@@ -24,11 +23,11 @@ class UserProfileForm(forms.ModelForm):
 
 class ProjectForm(forms.ModelForm):
     name = forms.CharField(help_text="Please enter a project name.")
-    # users = forms.MultipleChoiceField(widget=forms.HiddenInput())
+    due_date = forms.DateTimeField(input_formats=['%m/%d/%Y %H:%M %p'])
 
     class Meta:
         model = Project
-        fields = ['name']
+        fields = ['name', 'due_date']
 
 
 class NotesForm(forms.ModelForm):

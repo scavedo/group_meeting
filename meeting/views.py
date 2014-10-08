@@ -78,6 +78,7 @@ def create_project(request):
         form = ProjectForm(request.POST)
         if form.is_valid():
             project = form.save(commit=False)
+            project.owner = UserProfile.objects.get(user=request.user)
             project.save()
             project.users.add(UserProfile.objects.get(user=request.user))
             project.save()

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 
 class UserProfile(models.Model):
@@ -12,7 +13,9 @@ class UserProfile(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=128)
+    owner = models.ForeignKey(UserProfile, related_name="proj_owner")
     users = models.ManyToManyField(UserProfile)
+    due_date = models.DateTimeField(blank=True, null=False)
     completed = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -21,7 +24,7 @@ class Project(models.Model):
 
 class Note(models.Model):
     # project = models.ForeignKey('Project')
-    # date_added = models.DateTimeField()
+    date_added = models.DateTimeField(default=datetime.now())
     title = models.CharField(max_length=128)
     content = models.TextField()
 
@@ -31,8 +34,8 @@ class Note(models.Model):
 
 class File(models.Model):
     # project = models.ForeignKey('Project')
+    date_added = models.DateTimeField(default=datetime.now())
     title = models.CharField(max_length=128)
-    # date_added = models.DateTimeField()
     file = models.FileField(upload_to='files')
 
     def __unicode__(self):
@@ -41,7 +44,7 @@ class File(models.Model):
 
 class Meeting(models.Model):
     # project = models.ForeignKey('Project')
-    # date_added = models.DateTimeField()
+    date_added = models.DateTimeField(default=datetime.now())
     date_begin = models.DateTimeField()
     date_end = models.DateTimeField()
     title = models.CharField(max_length=128)
