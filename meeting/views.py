@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm
-from meeting.models import UserProfile
+from meeting.models import UserProfile, Project
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -10,8 +10,15 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required(login_url='/login/')
 def index(request):
-    # now return the rendered template
-    return render(request, 'meeting/index.html')
+    user = UserProfile.objects.get(user=request.user)
+    projects = user.project_set.all()
+    active_projects = user.project_set.filter(completed=False)
+    completed_projects = user.project_set.filter(completed=True)
+    return render(request, 'meeting/index.html', {
+        'projects': projects,
+        'active_projects': active_projects,
+        'completed_projects': completed_projects
+    })
 
 
 def about(request):
