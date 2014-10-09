@@ -1,31 +1,29 @@
-{% extends 'base.html' %}
 {% load addcss %}
 {% load static %}
 
-{% block styles %}
-{% endblock %}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title" id="myModalLabel">Add a File</h4>
+</div>
 
-{% block content %}
-    <div class="container login well">
-        <h1>Add a File</h1>
+<div class="modal-body">
+    <form id="file_form" method="post" action="/add-file/">
 
-        <form id="file_form" method="post" action="/add-file/">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
 
-            {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
+        {% for field in form.visible_fields %}
+            {{ field.errors }}
+            {{ field.label_tag }}
+            {{ field | addcss:"form-control"}}
+            <br/>
+        {% endfor %}
 
-            {% for field in form.visible_fields %}
-                {{ field.errors }}
-                {{ field.label_tag }}
-                {{ field | addcss:"form-control"}}
-                <br/>
-            {% endfor %}
+        <br />
 
-            <br />
-
-            <input class="btn btn-primary" type="submit" name="submit" value="Add File" />
-        </form>
-    </div><!-- /container -->
-{% endblock %}
+        <input class="btn btn-primary" type="submit" name="submit" value="Add File" />
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    </form>
+</div>
