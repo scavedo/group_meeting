@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import datetime, date
 
 
 class UserProfile(models.Model):
@@ -20,6 +20,11 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def is_past_due(self):
+        if date.today() > self.due_date:
+            return True
+        return False
 
 
 class Note(models.Model):

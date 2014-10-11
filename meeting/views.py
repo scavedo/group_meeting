@@ -12,12 +12,18 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     user = UserProfile.objects.get(user=request.user)
     projects = user.project_set.all()
-    active_projects = user.project_set.filter(completed=False)
-    completed_projects = user.project_set.filter(completed=True)
+    active_projects = projects.filter(completed=False)
+    completed_projects = projects.filter(completed=True)
+    pid = request.GET.get('pid')
+    if pid:
+        display_project = projects.filter(id=pid)
+    else:
+        display_project = None
     return render(request, 'meeting/index.html', {
         'projects': projects,
         'active_projects': active_projects,
-        'completed_projects': completed_projects
+        'completed_projects': completed_projects,
+        'display_project': display_project
     })
 
 
