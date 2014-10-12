@@ -20,7 +20,8 @@ class Migration(SchemaMigration):
         db.create_table(u'meeting_project', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['meeting.UserProfile'])),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='proj_owner', to=orm['meeting.UserProfile'])),
+            ('due_date', self.gf('django.db.models.fields.DateTimeField')(blank=True)),
             ('completed', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'meeting', ['Project'])
@@ -37,7 +38,8 @@ class Migration(SchemaMigration):
         # Adding model 'Note'
         db.create_table(u'meeting_note', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 10, 8, 0, 0))),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['meeting.Project'])),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 10, 11, 0, 0))),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
             ('content', self.gf('django.db.models.fields.TextField')()),
         ))
@@ -46,7 +48,8 @@ class Migration(SchemaMigration):
         # Adding model 'File'
         db.create_table(u'meeting_file', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 10, 8, 0, 0))),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['meeting.Project'])),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 10, 11, 0, 0))),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
             ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
         ))
@@ -55,7 +58,8 @@ class Migration(SchemaMigration):
         # Adding model 'Meeting'
         db.create_table(u'meeting_meeting', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 10, 8, 0, 0))),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['meeting.Project'])),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 10, 11, 0, 0))),
             ('date_begin', self.gf('django.db.models.fields.DateTimeField')()),
             ('date_end', self.gf('django.db.models.fields.DateTimeField')()),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
@@ -124,35 +128,39 @@ class Migration(SchemaMigration):
         },
         u'meeting.file': {
             'Meta': {'object_name': 'File'},
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 10, 8, 0, 0)'}),
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 10, 11, 0, 0)'}),
             'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['meeting.Project']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         u'meeting.meeting': {
             'Meta': {'object_name': 'Meeting'},
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 10, 8, 0, 0)'}),
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 10, 11, 0, 0)'}),
             'date_begin': ('django.db.models.fields.DateTimeField', [], {}),
             'date_end': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'place': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['meeting.Project']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         u'meeting.note': {
             'Meta': {'object_name': 'Note'},
             'content': ('django.db.models.fields.TextField', [], {}),
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 10, 8, 0, 0)'}),
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 10, 11, 0, 0)'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['meeting.Project']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         u'meeting.project': {
             'Meta': {'object_name': 'Project'},
             'completed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'due_date': ('django.db.models.fields.DateTimeField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['meeting.UserProfile']"}),
-            'users': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'users'", 'symmetrical': 'False', 'to': u"orm['meeting.UserProfile']"})
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'proj_owner'", 'to': u"orm['meeting.UserProfile']"}),
+            'users': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['meeting.UserProfile']", 'symmetrical': 'False'})
         },
         u'meeting.userprofile': {
             'Meta': {'object_name': 'UserProfile'},

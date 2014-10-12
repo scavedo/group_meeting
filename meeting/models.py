@@ -28,7 +28,7 @@ class Project(models.Model):
 
 
 class Note(models.Model):
-    # project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project')
     date_added = models.DateTimeField(default=datetime.now())
     title = models.CharField(max_length=128)
     content = models.TextField()
@@ -38,7 +38,7 @@ class Note(models.Model):
 
 
 class File(models.Model):
-    # project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project')
     date_added = models.DateTimeField(default=datetime.now())
     title = models.CharField(max_length=128)
     file = models.FileField(upload_to='files')
@@ -48,7 +48,7 @@ class File(models.Model):
 
 
 class Meeting(models.Model):
-    # project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project')
     date_added = models.DateTimeField(default=datetime.now())
     date_begin = models.DateTimeField()
     date_end = models.DateTimeField()
