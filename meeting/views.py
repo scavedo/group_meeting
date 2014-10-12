@@ -64,10 +64,11 @@ def register(request):
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    return render_to_response(
-            'meeting/register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
-            context)
+    return render_to_response('meeting/register.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'registered': registered
+    }, context)
 
 
 def user_login(request):
