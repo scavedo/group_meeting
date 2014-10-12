@@ -1,10 +1,7 @@
 <p>Files</p>
-<a data-toggle="modal" href="/add-file/" data-target="#add-files" class="btn btn-primary">Add File</a>
-
-<div class="modal fade" id="add-files" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-        </div>
-    </div>
+<div>
+    {% for file in files %}
+        {{ file.title }}
+        <a href="{{ file.file }}" target="_blank">Download</a>
+    {% endfor %}
 </div>

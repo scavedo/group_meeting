@@ -3,73 +3,75 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-    <div class="sidebar col-md-3">
-        <div class="well">
-            <h3>{{ user.username }}'s Projects</h3>
-            <ul class="list-group">
-                {% if projects %}
-                    <li class="list-group-item list-group-item-info" style="cursor: default;">Active Projects</li>
-                    {% for project in active_projects %}
-                        <li class="list-group-item" style="cursor:  pointer;" onclick="changeProject('project', 'project-content', {{ project.id }})">{{ project.name }}</li>
-                    {% endfor %}
-                    {% if completed_projects %}<br />{% endif %}
-                    <li class="list-group-item list-group-item-info" style="cursor: default;">Completed Projects</li>
-                    {% for project in completed_projects %}
-                        <li class="list-group-item" style="cursor:  pointer;" onclick="changeProject('project', 'project-content', {{ project.id }})">{{ project.name }}</li>
-                    {% endfor %}
-                {% else %}
-                    <li>No projects. <a href="/create-project">Create One</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
+    <div class="col-lg-12" id="project">
+        <div id="project-content">
+            <div class="col-md-3">
+                <div class="well">
+                    <ul class = "list-group">
+                        {% for project in display_project %}
+                        {{ project.name }}'s Actions
+                        <li class = "list-group-item">
+                            <a href="/add-note/">Add a Note</a>
+                        </li>
+                        <li class = "list-group-item">
+                            <a href="/add-file/">Add a File</a>
+                        </li>
+                        <li class = "list-group-item">
+                            <a href="/add-meeting/">Add a Meeting</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
 
-    <div class="col-md-9" id="project">
-        <div id="project-content" class="well">
-            {% if not display_project %}
-                <h3>No project selected.</h3>
-            {% else %}
-                {% for project in display_project %}
-                      <h1>{{ project.name }}
-                          {% if project.is_past_due %}<small class="text-danger">{% else %}<small>{% endif %}
-                            Due: {{ project.due_date }}
-                          </small>
-                      </h1>
-                    <br />
-                    <div class="row clearfix">
-                        <div class="tabbable" id="tabs-158749">
-                            <ul class="nav nav-tabs">
-                                <li class="active">
-                                    <a href="#panel-1" data-toggle="tab">Home</a>
-                                </li>
-                                <li>
-                                    <a href="#panel-2" data-toggle="tab">Notes</a>
-                                </li>
-                                <li>
-                                    <a href="#panel-3" data-toggle="tab">Files</a>
-                                </li>
-                                <li>
-                                    <a href="#panel-4" data-toggle="tab">Calendar</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="panel-1">
-                                    {% include 'meeting/project-home.html' %}
-                                </div>
-                                <div class="tab-pane" id="panel-2">
-                                    {% include 'meeting/notes.html' %}
-                                </div>
-                                <div class="tab-pane" id="panel-3">
-                                    {% include 'meeting/files.html' %}
-                                </div>
-                                <div class="tab-pane" id="panel-4">
-                                    {% include 'meeting/calendar.html' %}
+            <div class="col-md-9">
+                <div class="well">
+                    {% if not display_project %}
+                        <h3>No project selected.</h3>
+                    {% else %}
+                        {% for project in display_project %}
+                              <h1>{{ project.name }}
+                                  {% if project.is_past_due %}<small class="text-danger">{% else %}<small>{% endif %}
+                                    Due: {{ project.due_date }}
+                                  </small>
+                              </h1>
+                            <br />
+                            <div class="row clearfix">
+                                <div class="tabbable" id="tabs-158749">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active">
+                                            <a href="#panel-1" data-toggle="tab">Home</a>
+                                        </li>
+                                        <li>
+                                            <a href="#panel-2" data-toggle="tab">Notes</a>
+                                        </li>
+                                        <li>
+                                            <a href="#panel-3" data-toggle="tab">Files</a>
+                                        </li>
+                                        <li>
+                                            <a href="#panel-4" data-toggle="tab">Calendar</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="panel-1">
+                                            {% include 'meeting/project-home.html' %}
+                                        </div>
+                                        <div class="tab-pane" id="panel-2">
+                                            {% include 'meeting/notes.html' %}
+                                        </div>
+                                        <div class="tab-pane" id="panel-3">
+                                            {% include 'meeting/files.html' %}
+                                        </div>
+                                        <div class="tab-pane" id="panel-4">
+                                            {% include 'meeting/calendar.html' %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

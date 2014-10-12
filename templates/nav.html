@@ -17,6 +17,24 @@
                 <li><a href="/about">About</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="/create-project">Create Project</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects<strong class="caret"></strong></a>
+                        <ul class="dropdown-menu">
+                            {% if projects %}
+                                <li class="dropdown-header">Active Projects</li>
+                                {% for project in active_projects %}
+                                    <li><a href="#" onclick="changeProject('project', 'project-content', {{ project.id }})">{{ project.name }}</a></li>
+                                {% endfor %}
+                                {% if completed_projects %}<li class="divider"></li>{% endif %}
+                                <li class="dropdown-header">Completed Projects</li>
+                                {% for project in completed_projects %}
+                                    <li><a href="#" onclick="changeProject('project', 'project-content', {{ project.id }})">{{ project.name }}</a></li>
+                                {% endfor %}
+                            {% else %}
+                                <li>No projects. <a href="/create-project">Create One</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
                 {% endif %}
             </ul>
 

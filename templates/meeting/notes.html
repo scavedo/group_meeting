@@ -1,10 +1,20 @@
 <p>Notes</p>
-<a data-toggle="modal" href="/add-note/" data-target="#add-notes" class="btn btn-primary">Add Note</a>
 
-<div class="modal fade" id="add-notes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
+<div class="panel-group" id="accordion">
+    {% for note in notes %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ note.id }}">
+                        {{ note.title }}
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse-{{ note.id }}" class="panel-collapse collapse">
+                <div class="panel-body">
+                    {{ note.content }}
+                </div>
+            </div>
         </div>
-    </div>
+    {% endfor %}
 </div>

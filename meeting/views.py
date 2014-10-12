@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm
-from meeting.models import UserProfile, Project
+from meeting.models import UserProfile, Project, Note, Meeting, File
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -15,15 +15,26 @@ def index(request):
     active_projects = projects.filter(completed=False)
     completed_projects = projects.filter(completed=True)
     pid = request.GET.get('pid')
+    request.session['pid'] = pid
     if pid:
         display_project = projects.filter(id=pid)
+        meetings = Meeting.objects.filter(project=pid)
+        notes = Note.objects.filter(project=pid)
+        files = File.objects.filter(project=pid)
+        print meetings
     else:
         display_project = None
+        meetings = None
+        files = None
+        notes = None
     return render(request, 'meeting/index.html', {
         'projects': projects,
         'active_projects': active_projects,
         'completed_projects': completed_projects,
-        'display_project': display_project
+        'display_project': display_project,
+        'meetings': meetings,
+        'notes': notes,
+        'files': files
     })
 
 
@@ -108,7 +119,10 @@ def add_meeting(request):
     if request.method == 'POST':
         form = MeetingForm(request.POST)
         if form.is_valid():
-            form.save(commit=True)
+            pid = request.session.get('pid')
+            meeting = form.save(commit=False)
+            meeting.project = Project.objects.get(id=pid)
+            meeting.save()
             return HttpResponseRedirect('/')
         else:
             print form.errors
@@ -120,9 +134,17 @@ def add_meeting(request):
 def add_file(request):
     context = RequestContext(request)
     if request.method == 'POST':
-        form = FilesForm(request.POST)
+        form = FilesForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save(commit=True)
+            pid = request.session.get('pid')
+            fileform = form.save(commit=False)
+            fileform.project = Project.objects.get(id=pid)
+            fileform.save()
+            if 'file' in request.FILES:
+                fileform.file = request.FILES['file']
+            else:
+                print "no"
+            fileform.save()
             return HttpResponseRedirect('/')
         else:
             print form.errors
@@ -136,7 +158,10 @@ def add_note(request):
     if request.method == 'POST':
         form = NotesForm(request.POST)
         if form.is_valid():
-            form.save(commit=True)
+            pid = request.session.get('pid')
+            note = form.save(commit=False)
+            note.project = Project.objects.get(id=pid)
+            note.save()
             return HttpResponseRedirect('/')
         else:
             print form.errors

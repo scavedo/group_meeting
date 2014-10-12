@@ -1,29 +1,31 @@
+{% extends 'base.html' %}
 {% load addcss %}
 {% load static %}
 
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-    <h4 class="modal-title" id="myModalLabel">Add a Note</h4>
-</div>
+{% block styles %}
+{% endblock %}
 
-<div class="modal-body">
-    <form id="file_form" method="post" action="/add-note/">
+{% block content %}
+    <div class="container login well">
+        <h1>Add a Note</h1>
 
-        {% csrf_token %}
-        {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
+        <form id="note_form" method="post" action="/add-note/">
 
-        {% for field in form.visible_fields %}
-            {{ field.errors }}
-            {{ field.label_tag }}
-            {{ field | addcss:"form-control"}}
-            <br/>
-        {% endfor %}
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
 
-        <br />
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field | addcss:"form-control"}}
+                <br/>
+            {% endfor %}
 
-        <input class="btn btn-primary" type="submit" name="submit" value="Add Note" />
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-    </form>
-</div>
+            <br />
+
+            <input class="btn btn-primary" type="submit" name="submit" value="Create Note" />
+        </form>
+    </div><!-- /container -->
+{% endblock %}
