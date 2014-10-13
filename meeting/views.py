@@ -1,10 +1,11 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm
+from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm, AddUserForm
 from meeting.models import UserProfile, Project, Note, Meeting, File
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -12,8 +13,6 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     user = UserProfile.objects.get(user=request.user)
     projects = user.project_set.all()
-    active_projects = projects.filter(completed=False)
-    completed_projects = projects.filter(completed=True)
     pid = request.GET.get('pid')
     request.session['pid'] = pid
     if pid:
@@ -28,9 +27,6 @@ def index(request):
         files = None
         notes = None
     return render(request, 'meeting/index.html', {
-        'projects': projects,
-        'active_projects': active_projects,
-        'completed_projects': completed_projects,
         'display_project': display_project,
         'meetings': meetings,
         'notes': notes,
@@ -113,6 +109,28 @@ def create_project(request):
     else:
         form = ProjectForm()
     return render_to_response('meeting/create-project.html', {'form': form}, context)
+
+
+def add_user(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = AddUserForm(request.POST)
+        if form.is_valid():
+            pid = request.session.get('pid')
+            project = Project.objects.get(id=pid)
+            this = form.cleaned_data['user']
+            if User.objects.filter(username=this):
+                user = User.objects.filter(username=this)
+            else:
+                print "invallid username"
+            project.users.add(UserProfile.objects.get(user=user))
+            project.save()
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = AddUserForm()
+    return render_to_response('meeting/add-user.html', {'form': form}, context)
 
 
 def add_meeting(request):

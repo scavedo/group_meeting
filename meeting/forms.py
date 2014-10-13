@@ -60,3 +60,11 @@ class MeetingForm(forms.ModelForm):
         fields = ['title', 'date_begin', 'date_end', 'place', 'description']
 
 
+class AddUserForm(forms.ModelForm):
+    user = forms.CharField()
+
+    class Meta:
+        model = Project
+        fields = ['user']
+
+

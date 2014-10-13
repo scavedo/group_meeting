@@ -15,5 +15,5 @@ urlpatterns = patterns('',
     url(r'^add-meeting/$', 'meeting.views.add_meeting', name='add-meeting'),
     url(r'^add-file/$', 'meeting.views.add_file', name='add-file'),
     url(r'^add-note/$', 'meeting.views.add_note', name='add-note'),
-    url(r'^nav/', 'meeting.views.nav', name='navbar'),
+    url(r'^add-user/$', 'meeting.views.add_user', name='add-user')
 )
