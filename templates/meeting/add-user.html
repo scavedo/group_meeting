@@ -9,7 +9,7 @@
     <div class="container login well">
         <h1>Add a User</h1>
 
-        <form id="file_form" method="post" action="/add-user/"">
+        <form id="file_form" method="post" action="/add-user/">
 
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
@@ -25,7 +25,7 @@
 
             <br />
 
-            <input class="btn btn-primary" type="submit" name="submit" value="Add File" />
+            <input class="btn btn-primary" type="submit" name="submit" value="Add User" />
         </form>
     </div><!-- /container -->
 {% endblock %}

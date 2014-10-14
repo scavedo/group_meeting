@@ -7,6 +7,13 @@
         <div id="project-content">
             {% if not display_project %}
                 <div class="well">
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <p{% if message.tags %} class="{{ message.tags }} alert alert-danger"{% endif %}>{{ message }}</p>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <h2>No Project Selected.</h2>
                     <p>You may select one below, or use the navagition bar to make your choice.</p>
                     {% if active_projects %}
@@ -29,21 +36,64 @@
                     {% endif %}
                 </div>
             {% else %}
+{#                <div class="col-md-2">#}
+{#                    <div class="well" style="text-align: center;">#}
+{#                        {% for project in display_project %}#}
+{#                        <h4>{{ project.name }}'s Actions</h4>#}
+{#                        <div class="btn-group-vertical btn-group-lg">#}
+{#                            <a href="/add-user/" class="btn btn-primary">Add a User</a>#}
+{#                            <a href="/add-note/" class="btn btn-primary">Add a Note</a>#}
+{#                            <a href="/add-file/" class="btn btn-primary">Add a File</a>#}
+{#                            <a href="/add-meeting/" class="btn btn-primary">Add a Meeting</a>#}
+{#                        </div>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                    <div class="well">#}
+{#                        {% for project in display_project %}#}
+{#                            <h4>{{ project.name }}'s Members</h4>#}
+{#                            <ul class="list-group">#}
+{#                                {% for user in project_user %}#}
+{#                                    <li class="list-group-item">{{ user.name }}</li>#}
+{#                                {% endfor %}#}
+{#                            </ul>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                </div>#}
                 <div class="col-md-2">
-                    <div class="well" style="text-align: center;">
-                        {% for project in display_project %}
-                        <h4>{{ project.name }}'s Actions</h4>
-                        <div class="btn-group-vertical btn-group-lg">
-                            <a href="/add-user/" class="btn btn-primary">Add a User</a>
-                            <a href="/add-note/" class="btn btn-primary">Add a Note</a>
-                            <a href="/add-file/" class="btn btn-primary">Add a File</a>
-                            <a href="/add-meeting/" class="btn btn-primary">Add a Meeting</a>
+                    <div class="well">
+                        <div class="list-group">
+                            {% if projects %}
+                                <h4>{{ user }}'s Projects</h4>
+                                {% if active_projects %}
+                                    <a class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="#accordion" href="#collapse-active">
+                                        Active Projects
+                                    </a>
+                                    <div id="collapse-active" class="panel-collapse collapse in">
+                                        {% for project in active_projects %}
+                                            <a class="list-group-item" href="" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a></li>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                {% if completed_projects %}
+                                    {% if active_projects %}<p class="divider"></p>{% endif %}
+                                    <a class="list-group-item list-group-item-success" data-toggle="collapse" data-parent="#accordion" href="#collapse-completed">
+                                        Completed Projects
+                                    </a>
+                                    <div id="collapse-completed" class="panel-collapse collapse in">
+                                        {% for project in completed_projects %}
+                                            <a class="list-group-item" href="" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a></li>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <li class="dropdown-header">No Projects</li>
+                                <li><a href="/create-project">Create One</a></li>
+                            {% endif %}
                         </div>
-                        {% endfor %}
                     </div>
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-8">
                     <div class="well">
                         {% for project in display_project %}
                               <h1>{{ project.name }}
@@ -84,6 +134,29 @@
                                     </div>
                                 </div>
                             </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="well" style="text-align: center;">
+                        {% for project in display_project %}
+                        <h4>{{ project.name }}'s Actions</h4>
+                        <div class="btn-group-vertical btn-group-lg">
+                            <a href="/add-user/" class="btn btn-primary">Add a User</a>
+                            <a href="/add-note/" class="btn btn-primary">Add a Note</a>
+                            <a href="/add-file/" class="btn btn-primary">Add a File</a>
+                            <a href="/add-meeting/" class="btn btn-primary">Add a Meeting</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="well">
+                        {% for project in display_project %}
+                            <h4>{{ project.name }}'s Members</h4>
+                            <ul class="list-group">
+                                {% for project_user in project.users.all %}
+                                    <li class="list-group-item">{{ project_user.user }}</li>
+                                {% endfor %}
+                            </ul>
                         {% endfor %}
                     </div>
                 </div>

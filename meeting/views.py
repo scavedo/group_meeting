@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm, AddUserForm
 from meeting.models import UserProfile, Project, Note, Meeting, File
@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 
 # Create your views here.
@@ -13,6 +14,9 @@ from django.contrib.auth.models import User
 def index(request):
     user = UserProfile.objects.get(user=request.user)
     projects = user.project_set.all()
+
+    active_projects = projects.filter(completed=False)
+    completed_projects = projects.filter(completed=True)
     pid = request.GET.get('pid')
     request.session['pid'] = pid
     if pid:
@@ -20,13 +24,17 @@ def index(request):
         meetings = Meeting.objects.filter(project=pid)
         notes = Note.objects.filter(project=pid)
         files = File.objects.filter(project=pid)
-        print meetings
+        # project_users = Project.objects.get(id=pid).users_set.all()
+        # print project_users
     else:
         display_project = None
         meetings = None
         files = None
         notes = None
     return render(request, 'meeting/index.html', {
+        'projects': projects,
+        'active_projects': active_projects,
+        'completed_projects': completed_projects,
         'display_project': display_project,
         'meetings': meetings,
         'notes': notes,
@@ -111,21 +119,27 @@ def create_project(request):
     return render_to_response('meeting/create-project.html', {'form': form}, context)
 
 
+@login_required(login_url='/login/')
 def add_user(request):
     context = RequestContext(request)
     if request.method == 'POST':
         form = AddUserForm(request.POST)
         if form.is_valid():
             pid = request.session.get('pid')
-            project = Project.objects.get(id=pid)
-            this = form.cleaned_data['user']
-            if User.objects.filter(username=this):
-                user = User.objects.filter(username=this)
+            if not pid:
+                messages.add_message(request, messages.WARNING, 'You need to select a project before you can add a user.')
+                return HttpResponseRedirect('/')
             else:
-                print "invallid username"
-            project.users.add(UserProfile.objects.get(user=user))
-            project.save()
-            return HttpResponseRedirect('/')
+                project = Project.objects.get(id=pid)
+                this = form.cleaned_data['user']
+                if User.objects.filter(username=this):
+                    user = User.objects.filter(username=this)
+                else:
+                    print "invalid username"
+                project.users.add(UserProfile.objects.get(user=user))
+                project.save()
+                return HttpResponseRedirect('/')
+
         else:
             print form.errors
     else:
@@ -133,16 +147,21 @@ def add_user(request):
     return render_to_response('meeting/add-user.html', {'form': form}, context)
 
 
+@login_required(login_url='/login/')
 def add_meeting(request):
     context = RequestContext(request)
     if request.method == 'POST':
         form = MeetingForm(request.POST)
         if form.is_valid():
             pid = request.session.get('pid')
-            meeting = form.save(commit=False)
-            meeting.project = Project.objects.get(id=pid)
-            meeting.save()
-            return HttpResponseRedirect('/')
+            if not pid:
+                messages.add_message(request, messages.WARNING, 'You need to select a project before you can add a meeting.')
+                return HttpResponseRedirect('/')
+            else:
+                meeting = form.save(commit=False)
+                meeting.project = Project.objects.get(id=pid)
+                meeting.save()
+                return HttpResponseRedirect('/')
         else:
             print form.errors
     else:
@@ -150,21 +169,26 @@ def add_meeting(request):
     return render_to_response('meeting/add-meeting.html', {'form': form}, context)
 
 
+@login_required(login_url='/login/')
 def add_file(request):
     context = RequestContext(request)
     if request.method == 'POST':
         form = FilesForm(request.POST, request.FILES)
         if form.is_valid():
             pid = request.session.get('pid')
-            fileform = form.save(commit=False)
-            fileform.project = Project.objects.get(id=pid)
-            fileform.save()
-            if 'file' in request.FILES:
-                fileform.file = request.FILES['file']
+            if not pid:
+                messages.add_message(request, messages.WARNING, 'You need to select a project before you can add a file.')
+                return HttpResponseRedirect('/')
             else:
-                print "no"
-            fileform.save()
-            return HttpResponseRedirect('/')
+                fileform = form.save(commit=False)
+                fileform.project = Project.objects.get(id=pid)
+                fileform.save()
+                if 'file' in request.FILES:
+                    fileform.file = request.FILES['file']
+                else:
+                    print "no"
+                fileform.save()
+                return HttpResponseRedirect('/')
         else:
             print form.errors
     else:
@@ -172,16 +196,21 @@ def add_file(request):
     return render_to_response('meeting/add-file.html', {'form': form}, context)
 
 
+@login_required(login_url='/login/')
 def add_note(request):
     context = RequestContext(request)
     if request.method == 'POST':
         form = NotesForm(request.POST)
         if form.is_valid():
             pid = request.session.get('pid')
-            note = form.save(commit=False)
-            note.project = Project.objects.get(id=pid)
-            note.save()
-            return HttpResponseRedirect('/')
+            if not pid:
+                messages.add_message(request, messages.WARNING, 'You need to select a project before you can add a note.')
+                return HttpResponseRedirect('/')
+            else:
+                note = form.save(commit=False)
+                note.project = Project.objects.get(id=pid)
+                note.save()
+                return HttpResponseRedirect('/')
         else:
             print form.errors
     else:
