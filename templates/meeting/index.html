@@ -5,162 +5,115 @@
 {% block content %}
     <div class="col-lg-12" id="project">
         <div id="project-content">
-            {% if not display_project %}
+            <div class="col-md-2">
                 <div class="well">
-                    {% if messages %}
-                        <ul class="messages">
-                            {% for message in messages %}
-                            <p{% if message.tags %} class="{{ message.tags }} alert alert-danger"{% endif %}>{{ message }}</p>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                    <h2>No Project Selected.</h2>
-                    <p>You may select one below, or use the navagition bar to make your choice.</p>
-                    {% if active_projects %}
-                        <div class="col-md-6">
-                            <h4>Active Projects</h4>
-                            <div class="btn-group-lg btn-group-vertical">
-                                {% for project in active_projects %}
-                                    <a href="" class="btn btn-primary" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endif %}
-                    {% if completed_projects %}
-                        <h4>Completed Projects</h4>
-                         <div class="btn-group-lg btn-group-vertical">
-                            {% for project in completed_projects %}
-                                <a href="" class="btn btn-primary" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            {% else %}
-{#                <div class="col-md-2">#}
-{#                    <div class="well" style="text-align: center;">#}
-{#                        {% for project in display_project %}#}
-{#                        <h4>{{ project.name }}'s Actions</h4>#}
-{#                        <div class="btn-group-vertical btn-group-lg">#}
-{#                            <a href="/add-user/" class="btn btn-primary">Add a User</a>#}
-{#                            <a href="/add-note/" class="btn btn-primary">Add a Note</a>#}
-{#                            <a href="/add-file/" class="btn btn-primary">Add a File</a>#}
-{#                            <a href="/add-meeting/" class="btn btn-primary">Add a Meeting</a>#}
-{#                        </div>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
-{#                    <div class="well">#}
-{#                        {% for project in display_project %}#}
-{#                            <h4>{{ project.name }}'s Members</h4>#}
-{#                            <ul class="list-group">#}
-{#                                {% for user in project_user %}#}
-{#                                    <li class="list-group-item">{{ user.name }}</li>#}
-{#                                {% endfor %}#}
-{#                            </ul>#}
-{#                        {% endfor %}#}
-{#                    </div>#}
-{#                </div>#}
-                <div class="col-md-2">
-                    <div class="well">
-                        <div class="list-group">
-                            {% if projects %}
-                                <h4>{{ user }}'s Projects</h4>
-                                {% if active_projects %}
-                                    <a class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="#accordion" href="#collapse-active">
-                                        Active Projects
-                                    </a>
-                                    <div id="collapse-active" class="panel-collapse collapse in">
-                                        {% for project in active_projects %}
-                                            <a class="list-group-item" href="" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a></li>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                                {% if completed_projects %}
-                                    {% if active_projects %}<p class="divider"></p>{% endif %}
-                                    <a class="list-group-item list-group-item-success" data-toggle="collapse" data-parent="#accordion" href="#collapse-completed">
-                                        Completed Projects
-                                    </a>
-                                    <div id="collapse-completed" class="panel-collapse collapse in">
-                                        {% for project in completed_projects %}
-                                            <a class="list-group-item" href="" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a></li>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            {% else %}
-                                <li class="dropdown-header">No Projects</li>
-                                <li><a href="/create-project">Create One</a></li>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-8">
-                    <div class="well">
-                        {% for project in display_project %}
-                              <h1>{{ project.name }}
-                                  {% if project.is_past_due %}<small class="text-danger">{% else %}<small>{% endif %}
-                                    Due: {{ project.due_date }}
-                                  </small>
-                              </h1>
+                    <div class="list-group">
+                        {% if projects %}
+                            <h4>{{ user }}'s Projects</h4>
+                            <a href="/create-project/" class="btn btn-primary btn-group-justified">Create Project</a>
                             <br />
-                            <div class="row clearfix">
-                                <div class="tabbable" id="tabs-158749">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active">
-                                            <a href="#panel-1" data-toggle="tab">Home</a>
-                                        </li>
-                                        <li>
-                                            <a href="#panel-2" data-toggle="tab">Notes</a>
-                                        </li>
-                                        <li>
-                                            <a href="#panel-3" data-toggle="tab">Files</a>
-                                        </li>
-                                        <li>
-                                            <a href="#panel-4" data-toggle="tab">Calendar</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="panel-1">
-                                            {% include 'meeting/project-home.html' %}
-                                        </div>
-                                        <div class="tab-pane" id="panel-2">
-                                            {% include 'meeting/notes.html' %}
-                                        </div>
-                                        <div class="tab-pane" id="panel-3">
-                                            {% include 'meeting/files.html' %}
-                                        </div>
-                                        <div class="tab-pane" id="panel-4">
-                                            {% include 'meeting/calendar.html' %}
-                                        </div>
-                                    </div>
+                            {% if active_projects %}
+                                <a class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="#accordion" href="#collapse-active">
+                                    Active Projects
+                                </a>
+                                   <div id="collapse-active" class="panel-collapse collapse in">
+                                    {% for project in active_projects %}
+                                        <a class="list-group-item" href="" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a></li>
+                                    {% endfor %}
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endif %}
+                            {% if completed_projects %}
+                                {% if active_projects %}<p class="divider"></p>{% endif %}
+                                <a class="list-group-item list-group-item-success" data-toggle="collapse" data-parent="#accordion" href="#collapse-completed">
+                                    Completed Projects
+                                </a>
+                                <div id="collapse-completed" class="panel-collapse collapse in">
+                                    {% for project in completed_projects %}
+                                        <a class="list-group-item" href="" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a></li>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <li class="dropdown-header">No Projects</li>
+                            <li><a href="/create-project">Create One</a></li>
+                        {% endif %}
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="well" style="text-align: center;">
-                        {% for project in display_project %}
-                        <h4>{{ project.name }}'s Actions</h4>
-                        <div class="btn-group-vertical btn-group-lg">
-                            <a href="/add-user/" class="btn btn-primary">Add a User</a>
-                            <a href="/add-note/" class="btn btn-primary">Add a Note</a>
-                            <a href="/add-file/" class="btn btn-primary">Add a File</a>
-                            <a href="/add-meeting/" class="btn btn-primary">Add a Meeting</a>
-                        </div>
-                        {% endfor %}
-                    </div>
+            </div>
+            <div class="col-md-10">
+                {% if not display_project %}
                     <div class="well">
-                        {% for project in display_project %}
-                            <h4>{{ project.name }}'s Members</h4>
-                            <ul class="list-group">
-                                {% for project_user in project.users.all %}
-                                    <li class="list-group-item">{{ project_user.user }}</li>
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <p{% if message.tags %} class="{{ message.tags }} alert alert-danger"{% endif %}>{{ message }}</p>
                                 {% endfor %}
                             </ul>
-                        {% endfor %}
+                        {% endif %}
+                        <h2>No Project Selected.</h2>
                     </div>
-                </div>
-            {% endif %}
+                {% else %}
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="well">
+                                {% for project in display_project %}
+                                    <h1>{{ project.name }}
+                                      {% if project.is_past_due %}<small class="text-danger">{% else %}<small>{% endif %}
+                                        Due: {{ project.due_date }}
+                                      </small>
+                                    </h1>
+                                    <br />
+                                    <div class="btn-group btn-group-justified" data-toggle="buttons">
+                                        <label class="btn btn-primary active" onclick="loadHome({{ project.id }})">
+                                            <input type="radio" name="options" id="option1" checked>Home
+                                        </label>
+                                        <label class="btn btn-primary" onclick="loadNotes({{ project.id }});">
+                                            <input type="radio" name="options" id="option2">Notes
+                                        </label>
+                                        <label class="btn btn-primary" onclick="loadFiles({{ project.id }});">
+                                            <input type="radio" name="options" id="option3">Files
+                                        </label>
+                                        <label class="btn btn-primary" onclick="loadCalendar({{ project.id }});">
+                                            <input type="radio" name="options" id="option4">Calendar
+                                        </label>
+                                    </div>
+                                    <hr />
+                                    <div id="view_content">
+                                        {% include 'meeting/project-home.html' %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="well" style="text-align: center;">
+                                {% for project in display_project %}
+                                <h4>{{ project.name }}'s Actions</h4>
+                                <div class="btn-group-vertical">
+                                    <a href="/add-user/" class="btn btn-primary btn-block">Add a User</a>
+                                    <a href="/add-note/" class="btn btn-primary btn-block">Add a Note</a>
+                                    <a href="/add-file/" class="btn btn-primary btn-block">Add a File</a>
+                                    <a href="/add-meeting/" class="btn btn-primary btn-block">Add a Meeting</a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="well">
+                                {% for project in display_project %}
+                                    <h4>{{ project.name }}'s Members</h4>
+                                    <ul class="list-group">
+                                        {% for project_user in project.users.all %}
+                                            {% if project_user.user.is_authenticated %}
+                                                <li class="list-group-item">{{ project_user.user }}</li>
+                                            {% else %}
+                                                <li class="list-group-item disabled">{{ project_user.user }}</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}

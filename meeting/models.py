@@ -37,11 +37,15 @@ class Note(models.Model):
         return self.title
 
 
+def file_path(instance, filename):
+    return '/'.join(['files', str(instance.project.name), filename])
+
+
 class File(models.Model):
     project = models.ForeignKey('Project')
     date_added = models.DateTimeField(default=datetime.now())
     title = models.CharField(max_length=128)
-    file = models.FileField(upload_to='files')
+    file = models.FileField(upload_to=file_path)
 
     def __unicode__(self):
         return self.title
@@ -58,3 +62,9 @@ class Meeting(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def begin_format(self):
+        return '%s' % self.date_begin.strftime('%Y-%m-%dT%H:%M:%S')
+
+    def end_format(self):
+        return '%s' % self.date_begin.strftime('%Y-%m-%dT%H:%M:%S')

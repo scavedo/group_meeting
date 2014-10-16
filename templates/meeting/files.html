@@ -2,6 +2,6 @@
 <div>
     {% for file in files %}
         {{ file.title }}
-        <a href="{{ file.file }}" target="_blank">Download</a>
+        <a href="{{ file.file.url }}">Download</a>
     {% endfor %}
 </div>

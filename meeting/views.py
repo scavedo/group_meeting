@@ -14,31 +14,19 @@ from django.contrib import messages
 def index(request):
     user = UserProfile.objects.get(user=request.user)
     projects = user.project_set.all()
-
     active_projects = projects.filter(completed=False)
     completed_projects = projects.filter(completed=True)
     pid = request.GET.get('pid')
     request.session['pid'] = pid
     if pid:
         display_project = projects.filter(id=pid)
-        meetings = Meeting.objects.filter(project=pid)
-        notes = Note.objects.filter(project=pid)
-        files = File.objects.filter(project=pid)
-        # project_users = Project.objects.get(id=pid).users_set.all()
-        # print project_users
     else:
         display_project = None
-        meetings = None
-        files = None
-        notes = None
     return render(request, 'meeting/index.html', {
         'projects': projects,
         'active_projects': active_projects,
         'completed_projects': completed_projects,
-        'display_project': display_project,
-        'meetings': meetings,
-        'notes': notes,
-        'files': files
+        'display_project': display_project
     })
 
 
@@ -216,3 +204,51 @@ def add_note(request):
     else:
         form = NotesForm()
     return render_to_response('meeting/add-note.html', {'form': form}, context)
+
+
+def calendar(request):
+    pid = request.GET.get('pid')
+    if pid:
+        meetings = Meeting.objects.filter(project=pid)
+    else:
+        print "no"
+        meetings = None
+    return render(request, 'meeting/calendar.html', {
+        'meetings': meetings,
+    })
+
+
+def notes(request):
+    pid = request.GET.get('pid')
+    if pid:
+        notes = Note.objects.filter(project=pid)
+    else:
+        print "no"
+        notes = None
+    return render(request, 'meeting/notes.html', {
+        'notes': notes,
+    })
+
+
+def files(request):
+    pid = request.GET.get('pid')
+    if pid:
+        files = File.objects.filter(project=pid)
+    else:
+        print "no"
+        files = None
+    return render(request, 'meeting/files.html', {
+        'files': files,
+    })
+
+
+def home(request):
+    pid = request.GET.get('pid')
+    if pid:
+        files = File.objects.filter(project=pid)
+    else:
+        print "no"
+        files = None
+    return render(request, 'meeting/project-home.html', {
+        'files': files,
+    })

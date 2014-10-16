@@ -1,7 +1,28 @@
-<p>Calendar</p>
+<div id="display">
+    <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultDate: Date(),
+                editable: false,
+                eventLimit: true, // allow "more" link when too many events
+                events: [
+                    {% for meeting in meetings %}
+                        {
+                            title: '{{ meeting.title }}',
+                            start: '{{ meeting.begin_format }}',
+                            end: '{{ meeting.end_format }}'
+                        }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            });
+        });
+    </script>
 
-<div>
-    {% for meeting in meetings %}
-        {{ meeting.title }}
-    {% endfor %}
+    <div id='calendar' style="max-width: 700px; margin: 0 auto;"></div>
+
 </div>
