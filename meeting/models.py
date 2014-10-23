@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from datetime import datetime, date
 
 
+DEFAULT_USER_ID = 1
+DEFAULT_PROJECT_ID = 1
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     picture = models.ImageField(upload_to='profile_images', blank=True)
@@ -28,8 +32,9 @@ class Project(models.Model):
 
 
 class Note(models.Model):
-    project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project', default=DEFAULT_PROJECT_ID)
     date_added = models.DateTimeField(default=datetime.now())
+    added_by = models.ForeignKey('UserProfile', default=DEFAULT_USER_ID)
     title = models.CharField(max_length=128)
     content = models.TextField()
 
@@ -42,8 +47,9 @@ def file_path(instance, filename):
 
 
 class File(models.Model):
-    project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project', default=DEFAULT_PROJECT_ID)
     date_added = models.DateTimeField(default=datetime.now())
+    added_by = models.ForeignKey('UserProfile', default=DEFAULT_USER_ID)
     title = models.CharField(max_length=128)
     file = models.FileField(upload_to=file_path)
 
@@ -52,8 +58,9 @@ class File(models.Model):
 
 
 class Meeting(models.Model):
-    project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project', default=DEFAULT_PROJECT_ID)
     date_added = models.DateTimeField(default=datetime.now())
+    added_by = models.ForeignKey('UserProfile', default=DEFAULT_USER_ID)
     date_begin = models.DateTimeField()
     date_end = models.DateTimeField()
     title = models.CharField(max_length=128)
