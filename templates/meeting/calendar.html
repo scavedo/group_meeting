@@ -8,16 +8,29 @@
                     right: 'month,agendaWeek,agendaDay'
                 },
                 eventMouseover: function(event, jsEvent, view) {
+                    var display = "Where: " + event.place + "<br/>" +
+                            "From: " + event.start_date + "<br/>" +
+                            "To: " + event.end_date + "<br/>" +
+                            "Description: " + event.description
+                    $(this).popover({html:true, title:event.title, placement:'top', container:'body', content:display}).popover('show');
+                },
+                eventMouseout: function(event, jsEvent, view) {
+                    $(this).popover('destroy');
                 },
                 defaultDate: Date(),
                 editable: false,
-                eventLimit: true, // allow "more" link when too many events
+                eventLimit: true,
                 events: [
                     {% for meeting in meetings %}
                         {
                             title: '{{ meeting.title }}',
                             start: '{{ meeting.begin_format }}',
-                            end: '{{ meeting.end_format }}'
+                            end: '{{ meeting.end_format }}',
+                            id: '{{ meeting.title }}_{{ forloop.counter }}',
+                            description: '{{ meeting.description }}',
+                            place: '{{ meeting.place }}',
+                            start_date: '{{ meeting.date_begin }}',
+                            end_date: '{{ meeting.date_end }}'
                         }{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 ]

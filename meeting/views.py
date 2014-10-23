@@ -170,7 +170,6 @@ def add_file(request):
             else:
                 fileform = form.save(commit=False)
                 fileform.project = Project.objects.get(id=pid)
-                fileform.save()
                 if 'file' in request.FILES:
                     fileform.file = request.FILES['file']
                 else:

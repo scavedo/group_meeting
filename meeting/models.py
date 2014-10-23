@@ -43,7 +43,7 @@ class Note(models.Model):
 
 
 def file_path(instance, filename):
-    return '/'.join(['files', str(instance.project.name), filename])
+    return '/'.join(['files', str(instance.project.name.replace(" ", "_")), filename])
 
 
 class File(models.Model):
@@ -74,4 +74,4 @@ class Meeting(models.Model):
         return '%s' % self.date_begin.strftime('%Y-%m-%dT%H:%M:%S')
 
     def end_format(self):
-        return '%s' % self.date_begin.strftime('%Y-%m-%dT%H:%M:%S')
+        return '%s' % self.date_end.strftime('%Y-%m-%dT%H:%M:%S')
