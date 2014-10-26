@@ -17,6 +17,8 @@ PROJECT_PATH = os.path.abspath(PROJECT_PATH)
 TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
 
 STATIC_PATH = os.path.join(PROJECT_PATH, 'static/')
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'static1/')
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media/')
 
 
 # Quick-start development settings - unsuitable for production
@@ -122,3 +124,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
+
+MEDIA_URL = '/media/'
