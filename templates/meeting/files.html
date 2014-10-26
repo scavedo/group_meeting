@@ -4,7 +4,7 @@
         <p>No files for this project...</p>
     {% else %}
         {% for file in files %}
-            <p>{{ file.title }}: <a href="{{ file.file.url }}">Download</a></p>
+            <p>{{ file.title }}: <a href="{{ file.file.url }}" target="_blank">Download</a></p>
         {% endfor %}
     {% endif %}
     <br/><br/>

@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from itertools import chain
 
 
 # Create your views here.
@@ -245,9 +246,12 @@ def home(request):
     pid = request.GET.get('pid')
     if pid:
         files = File.objects.filter(project=pid)
+        meetings = Meeting.objects.filter(project=pid)
+        notes = Note.objects.filter(project=pid)
+        added = sorted(list(chain(files, meetings, notes)), key=lambda instance: instance.date_added)
     else:
         print "no"
         files = None
     return render(request, 'meeting/project-home.html', {
-        'files': files,
+        'added': added,
     })

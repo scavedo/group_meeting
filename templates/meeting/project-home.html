@@ -1,1 +1,5 @@
 <h4>Recent Activity</h4>
+
+{% for object in added   %}
+    <p>{{ object.added_by }} <span class="text-success">added</span> {{ object.title }} on {{ object.date_added }}</p>
+{% endfor %}
