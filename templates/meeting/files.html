@@ -1,7 +1,10 @@
-<p>Files</p>
+<h4>Files</h4>
 <div>
-    {% for file in files %}
-        {{ file.title }}
-        <a href="{{ file.file.url }}">Download</a>
-    {% endfor %}
+    {% if files %}
+        {% for file in files %}
+            <p>{{ file.title }}: <a href="{{ file.file.url }}">Download</a></p>
+        {% endfor %}
+    {% else %}
+        <a href="/add-file/" class="btn btn-primary btn-block">Add a File</a>
+    {% endif %}
 </div>
