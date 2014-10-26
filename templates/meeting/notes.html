@@ -1,20 +1,26 @@
-<p>Notes</p>
+<h4>Notes</h4>
 
 <div class="panel-group" id="accordion">
-    {% for note in notes %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ note.id }}">
-                        {{ note.title }}
-                    </a>
-                </h4>
-            </div>
-            <div id="collapse-{{ note.id }}" class="panel-collapse collapse">
-                <div class="panel-body">
-                    {{ note.content }}
+    {% if not notes %}
+        <p>No notes for this project...</p>
+    {% else %}
+        {% for note in notes %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ note.id }}">
+                            {{ note.title }}
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-{{ note.id }}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        {{ note.content }}
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    {% endif %}
+    <br/><br/>
+    <a href="/add-note/" class="btn btn-primary">Add a Note</a>
 </div>
