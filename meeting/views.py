@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm, AddUserForm
-from meeting.models import UserProfile, Project, Note, Meeting, File
+from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm, AddUserForm, ActionForm
+from meeting.models import UserProfile, Project, Note, Meeting, File, Action
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -141,6 +141,7 @@ def add_meeting(request):
     context = RequestContext(request)
     if request.method == 'POST':
         form = MeetingForm(request.POST)
+        action = ActionForm(request.POST)
         if form.is_valid():
             pid = request.session.get('pid')
             if not pid:
@@ -149,7 +150,15 @@ def add_meeting(request):
             else:
                 meeting = form.save(commit=False)
                 meeting.project = Project.objects.get(id=pid)
+                meeting.added_by = UserProfile.objects.get(user=request.user)
                 meeting.save()
+                action = action.save(commit=False)
+                action.project = Project.objects.get(id=pid)
+                action.by_who = UserProfile.objects.get(user=request.user)
+                action.category = "Meetings"
+                action.action_performed = "Added"
+                action.title = meeting.title
+                action.save()
                 return HttpResponseRedirect('/')
         else:
             print form.errors
@@ -163,6 +172,7 @@ def add_file(request):
     context = RequestContext(request)
     if request.method == 'POST':
         form = FilesForm(request.POST, request.FILES)
+        action = ActionForm(request.POST)
         if form.is_valid():
             pid = request.session.get('pid')
             if not pid:
@@ -171,11 +181,19 @@ def add_file(request):
             else:
                 fileform = form.save(commit=False)
                 fileform.project = Project.objects.get(id=pid)
+                fileform.added_by = UserProfile.objects.get(user=request.user)
                 if 'file' in request.FILES:
                     fileform.file = request.FILES['file']
                 else:
                     print "no"
                 fileform.save()
+                action = action.save(commit=False)
+                action.project = Project.objects.get(id=pid)
+                action.by_who = UserProfile.objects.get(user=request.user)
+                action.category = "Files"
+                action.action_performed = "Added"
+                action.title = fileform.title
+                action.save()
                 return HttpResponseRedirect('/')
         else:
             print form.errors
@@ -189,6 +207,7 @@ def add_note(request):
     context = RequestContext(request)
     if request.method == 'POST':
         form = NotesForm(request.POST)
+        action = ActionForm(request.POST)
         if form.is_valid():
             pid = request.session.get('pid')
             if not pid:
@@ -197,7 +216,15 @@ def add_note(request):
             else:
                 note = form.save(commit=False)
                 note.project = Project.objects.get(id=pid)
+                note.added_by = UserProfile.objects.get(user=request.user)
                 note.save()
+                action = action.save(commit=False)
+                action.project = Project.objects.get(id=pid)
+                action.by_who = UserProfile.objects.get(user=request.user)
+                action.category = "Notes"
+                action.action_performed = "Added"
+                action.title = note.title
+                action.save()
                 return HttpResponseRedirect('/')
         else:
             print form.errors
@@ -249,9 +276,10 @@ def home(request):
         meetings = Meeting.objects.filter(project=pid)
         notes = Note.objects.filter(project=pid)
         added = sorted(list(chain(files, meetings, notes)), key=lambda instance: instance.date_added)
+        actions = Action.objects.filter(project=pid)
     else:
         print "no"
         files = None
     return render(request, 'meeting/project-home.html', {
-        'added': added,
+        'actions': actions,
     })

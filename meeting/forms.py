@@ -1,4 +1,4 @@
-from meeting.models import UserProfile, Project, Note, File, Meeting
+from meeting.models import UserProfile, Project, Note, File, Meeting, Action
 from django.contrib.auth.models import User
 from django import forms
 
@@ -68,3 +68,7 @@ class AddUserForm(forms.ModelForm):
         fields = ['user']
 
 
+class ActionForm(forms.ModelForm):
+    class Meta:
+        model = Action
+        fields = []

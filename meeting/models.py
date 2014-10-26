@@ -75,3 +75,12 @@ class Meeting(models.Model):
 
     def end_format(self):
         return '%s' % self.date_end.strftime('%Y-%m-%dT%H:%M:%S')
+
+
+class Action(models.Model):
+    project = models.ForeignKey('Project', default=DEFAULT_PROJECT_ID)
+    date_occurred = models.DateTimeField(default=datetime.now())
+    by_who = models.ForeignKey('UserProfile', default=DEFAULT_USER_ID)
+    action_performed = models.CharField(max_length=128)
+    category = models.CharField(max_length=128)
+    title = models.CharField(max_length=128)
