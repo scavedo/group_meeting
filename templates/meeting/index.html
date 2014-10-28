@@ -57,6 +57,9 @@
                         <div class="col-md-10">
                             <div class="well">
                                 {% for project in display_project %}
+                                    <script>
+                                        test({{ project.id }});
+                                    </script>
                                     <h1>{{ project.name }}
                                       {% if project.is_past_due %}<small class="text-danger">{% else %}<small>{% endif %}
                                         Due: {{ project.due_date }}
@@ -64,7 +67,7 @@
                                     </h1>
                                     <br />
                                     <div class="btn-group btn-group-justified" data-toggle="buttons">
-                                        <label class="btn btn-primary active" onclick="loadHome({{ project.id }})">
+                                        <label class="btn btn-primary active" onclick="loadHome({{ project.id }});">
                                             <input type="radio" name="options" id="option1" checked>Home
                                         </label>
                                         <label class="btn btn-primary" onclick="loadNotes({{ project.id }});">
@@ -79,7 +82,16 @@
                                     </div>
                                     <hr />
                                     <div id="view_content">
-                                        {% include 'meeting/project-home.html' %}
+                                        <h4>Recent Activity</h4>
+
+                                        {% if not actions %}
+                                            <p>No recent activity...</p>
+                                        {% else %}
+                                            {% for action in actions   %}
+                                                <p>{{ action.by_who }} <span class="text-success">{{ action.action_performed }}</span> {{ action.title }} to
+                                                    {{ action.category }} on {{ action.date_occurred }}</p>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                 {% endfor %}
                             </div>

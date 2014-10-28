@@ -21,13 +21,16 @@ def index(request):
     request.session['pid'] = pid
     if pid:
         display_project = projects.filter(id=pid)
+        actions = Action.objects.filter(project=pid)
     else:
         display_project = None
+        actions = None
     return render(request, 'meeting/index.html', {
         'projects': projects,
         'active_projects': active_projects,
         'completed_projects': completed_projects,
-        'display_project': display_project
+        'display_project': display_project,
+        'actions': actions
     })
 
 
