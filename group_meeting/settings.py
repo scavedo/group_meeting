@@ -17,7 +17,7 @@ PROJECT_PATH = os.path.abspath(PROJECT_PATH)
 TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
 
 STATIC_PATH = os.path.join(PROJECT_PATH, 'static/')
-STATIC_ROOT = os.path.join(PROJECT_PATH, 'static1/')
+# STATIC_ROOT = os.path.join(PROJECT_PATH, 'static/')
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media/')
 
 

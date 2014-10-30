@@ -7,7 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$','meeting.views.index'),
+    url(r'^$', 'meeting.views.index'),
     url(r'^register/$', 'meeting.views.register', name='register'),
     url(r'^login/$', 'meeting.views.user_login', name='login'),
     url(r'^logout/$', 'meeting.views.user_logout', name='logout'),
@@ -20,7 +20,8 @@ urlpatterns = patterns('',
     url(r'^calendar/$', 'meeting.views.calendar', name='calendar'),
     url(r'^notes/$', 'meeting.views.notes', name='notes'),
     url(r'^files/$', 'meeting.views.files', name='files'),
-    url(r'^project-home/$', 'meeting.views.home', name='home')
+    url(r'^project-home/$', 'meeting.views.home', name='home'),
+    url(r'^delete-note/$', 'meeting.views.delete_note', name='delete-note')
 )
 
 if settings.DEBUG:

@@ -1,6 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm, AddUserForm, ActionForm
+from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm, AddUserForm, \
+    ActionForm, DeleteNoteForm
 from meeting.models import UserProfile, Project, Note, Meeting, File, Action
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -286,3 +287,30 @@ def home(request):
     return render(request, 'meeting/project-home.html', {
         'actions': actions,
     })
+
+
+def delete_note(request):
+    context = RequestContext(request)
+    nid = request.GET.get('nid')
+    if request.method == 'POST':
+        form = DeleteNoteForm(request.POST)
+        action = ActionForm(request.POST)
+        if form.is_valid():
+            pid = request.session.get('pid')
+            nid = request.POST['note-id']
+            if nid:
+                note = Note.objects.get(id=nid)
+                action = action.save(commit=False)
+                action.project = Project.objects.get(id=pid)
+                action.by_who = UserProfile.objects.get(user=request.user)
+                action.category = "Notes"
+                action.action_performed = "Deleted"
+                action.title = note.title
+                action.save()
+                note.delete()
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = NotesForm()
+    return render_to_response('meeting/delete-note.html', {'form': form, 'nid': nid}, context)

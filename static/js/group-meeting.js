@@ -17,3 +17,10 @@ function loadFiles(projectId) {
 function loadHome(projectId) {
     $('#view_content').load("project-home/?pid=" + projectId);
 }
+
+function deleteNote(id) {
+    $('#noteModal').load('delete-note/?nid=' + id, function() {
+        $('#noteModal').attr('data-id', id);
+        $('#myModal').modal("show");
+    });
+}

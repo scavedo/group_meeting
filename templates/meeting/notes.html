@@ -1,6 +1,7 @@
 <h4>Notes</h4>
 
 <div class="panel-group" id="accordion">
+    <div id="noteModal"></div>
     {% if not notes %}
         <p>No notes for this project...</p>
     {% else %}
@@ -17,10 +18,10 @@
                     <div class="panel-body">
                         {{ note.content }}
                         <br/><br/>
-                        <button type="submit" class="btn btn-info" style="">
+                        <button type="submit" class="btn btn-info">
                           <i class="glyphicon glyphicon-pencil"></i> Edit
                         </button>
-                        <button type="submit" class="btn btn-danger" style="float: right;">
+                        <button type="submit" class="btn btn-danger" style="float: right;" onclick="deleteNote( {{ note.id }});">
                           Delete <i class="glyphicon glyphicon-trash"></i>
                         </button>
                     </div>

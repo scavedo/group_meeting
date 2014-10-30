@@ -72,3 +72,9 @@ class ActionForm(forms.ModelForm):
     class Meta:
         model = Action
         fields = []
+
+
+class DeleteNoteForm(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = []
