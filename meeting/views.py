@@ -21,7 +21,7 @@ def index(request):
     request.session['pid'] = pid
     if pid:
         display_project = projects.filter(id=pid)
-        actions = Action.objects.filter(project=pid).order_by('-date_occurred')
+        actions = Action.objects.filter(project=pid).order_by('-date_occurred')[:15]
     else:
         display_project = None
         actions = None
@@ -346,7 +346,7 @@ def files(request):
 def home(request):
     pid = request.GET.get('pid')
     if pid:
-        actions = Action.objects.filter(project=pid).order_by('-date_occurred')
+        actions = Action.objects.filter(project=pid).order_by('-date_occurred')[:15]
     else:
         print "no"
     return render(request, 'meeting/project-home.html', {
