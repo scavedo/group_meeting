@@ -1,4 +1,5 @@
 <div id="display">
+    <div id="meetingModal"></div>
     <script>
         $(document).ready(function() {
             $('#calendar').fullCalendar({
@@ -7,15 +8,24 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
-                eventMouseover: function(event, jsEvent, view) {
-                    var display = "Where: " + event.place + "<br/>" +
-                            "From: " + event.start_date + "<br/>" +
-                            "To: " + event.end_date + "<br/>" +
-                            "Description: " + event.description
-                    $(this).popover({html:true, title:event.title, placement:'top', container:'body', content:display}).popover('show');
-                },
-                eventMouseout: function(event, jsEvent, view) {
-                    $(this).popover('destroy');
+                eventClick: function(event, jsEvent, view) {
+                    if (event.shown == false) {
+                        var display = "Where: " + event.place + "<br/>" +
+                                "From: " + event.start_date + "<br/>" +
+                                "To: " + event.end_date + "<br/>" +
+                                "Description: " + event.description + "<br/>" +
+                                "<hr/>" +
+                                "<button type='submit' class='btn btn-info'><i class='glyphicon glyphicon-pencil'></i> Edit</button>" +
+                                "<button type='submit' class='btn btn-danger' style='float: right;' onclick='deleteMeeting(" + event.id + ");'>Delete <i class='glyphicon glyphicon-trash'></i></button>"
+                        $(this).popover({html: true, title: event.title, placement: 'top', container: 'body', content: display}).popover('show');
+                        event.shown = true;
+                        $('#calendar').fullCalendar('updateEvent', event);
+                    }
+                    else {
+                        $('.popover').popover('destroy');
+                        event.shown = false;
+                        $('#calendar').fullCalendar('updateEvent', event);
+                    }
                 },
                 defaultDate: Date(),
                 editable: false,
@@ -26,11 +36,12 @@
                             title: '{{ meeting.title }}',
                             start: '{{ meeting.begin_format }}',
                             end: '{{ meeting.end_format }}',
-                            id: '{{ meeting.title }}_{{ forloop.counter }}',
+                            id: '{{ meeting.id }}',
                             description: '{{ meeting.description }}',
                             place: '{{ meeting.place }}',
                             start_date: '{{ meeting.date_begin }}',
-                            end_date: '{{ meeting.date_end }}'
+                            end_date: '{{ meeting.date_end }}',
+                            shown: false
                         }{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 ]

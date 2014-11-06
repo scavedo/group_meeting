@@ -82,14 +82,25 @@
                                     </div>
                                     <hr />
                                     <div id="view_content">
-                                        <h4>Recent Activity</h4>
+                                        <h3>Recent Activity</h3>
 
                                         {% if not actions %}
                                             <p>No recent activity...</p>
                                         {% else %}
-                                            {% for action in actions   %}
-                                                <p>{{ action.by_who }} <span class="text-success">{{ action.action_performed }}</span> {{ action.title }} to
-                                                    {{ action.category }} on {{ action.date_occurred }}</p>
+                                            {% for action in actions %}
+                                                {% if action.action_performed == "Added" %}
+                                                    <p>{{ action.by_who }} <span class="text-success">added</span> {{ action.title }} to
+                                                        {{ action.category }} on {{ action.date_occurred }}
+                                                    </p>
+                                                    {% elif action.action_performed == "Deleted" %}
+                                                       <p>{{ action.by_who }} <span class="text-danger">deleted</span> {{ action.title }} from
+                                                        {{ action.category }} on {{ action.date_occurred }}
+                                                    </p>
+                                                    {% elif action.action_performed == "Edited" %}
+                                                       <p>{{ action.by_who }} <span class="text-info">edited</span> {{ action.title }} in
+                                                        {{ action.category }} on {{ action.date_occurred }}
+                                                </p>
+                                                {% endif %}
                                             {% endfor %}
                                         {% endif %}
                                     </div>

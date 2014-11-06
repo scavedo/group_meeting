@@ -8,7 +8,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from itertools import chain
 
 
 # Create your views here.
@@ -22,7 +21,7 @@ def index(request):
     request.session['pid'] = pid
     if pid:
         display_project = projects.filter(id=pid)
-        actions = Action.objects.filter(project=pid)
+        actions = Action.objects.filter(project=pid).order_by('-date_occurred')
     else:
         display_project = None
         actions = None
@@ -194,7 +193,7 @@ def add_file(request):
                 action = action.save(commit=False)
                 action.project = Project.objects.get(id=pid)
                 action.by_who = UserProfile.objects.get(user=request.user)
-                action.category = "Files"
+                action.category = "File"
                 action.action_performed = "Added"
                 action.title = fileform.title
                 action.save()
@@ -237,6 +236,31 @@ def add_note(request):
     return render_to_response('meeting/add-note.html', {'form': form}, context)
 
 
+def edit_note(request, id=None):
+    note = Note.objects.get(pk=id)
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = NotesForm(request.POST, instance=note)
+        action = ActionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            action = action.save(commit=False)
+            action.project = Project.objects.get(id=note.project.id)
+            action.by_who = UserProfile.objects.get(user=request.user)
+            action.category = "Notes"
+            action.action_performed = "Edited"
+            action.title = note.title
+            action.save()
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = NotesForm(instance=note)
+    return render_to_response('meeting/edit-note.html', {'form': form}, context)
+
+
+
+
 def calendar(request):
     pid = request.GET.get('pid')
     if pid:
@@ -276,14 +300,9 @@ def files(request):
 def home(request):
     pid = request.GET.get('pid')
     if pid:
-        files = File.objects.filter(project=pid)
-        meetings = Meeting.objects.filter(project=pid)
-        notes = Note.objects.filter(project=pid)
-        added = sorted(list(chain(files, meetings, notes)), key=lambda instance: instance.date_added)
-        actions = Action.objects.filter(project=pid)
+        actions = Action.objects.filter(project=pid).order_by('-date_occurred')
     else:
         print "no"
-        files = None
     return render(request, 'meeting/project-home.html', {
         'actions': actions,
     })
@@ -314,3 +333,57 @@ def delete_note(request):
     else:
         form = NotesForm()
     return render_to_response('meeting/delete-note.html', {'form': form, 'nid': nid}, context)
+
+
+def delete_file(request):
+    context = RequestContext(request)
+    fid = request.GET.get('fid')
+    if request.method == 'POST':
+        form = DeleteNoteForm(request.POST)
+        action = ActionForm(request.POST)
+        if form.is_valid():
+            pid = request.session.get('pid')
+            fid = request.POST['file-id']
+            if fid:
+                file = File.objects.get(id=fid)
+                action = action.save(commit=False)
+                action.project = Project.objects.get(id=pid)
+                action.by_who = UserProfile.objects.get(user=request.user)
+                action.category = "Files"
+                action.action_performed = "Deleted"
+                action.title = file.title
+                action.save()
+                file.delete()
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = FilesForm()
+    return render_to_response('meeting/delete-file.html', {'form': form, 'fid': fid}, context)
+
+
+def delete_meeting(request):
+    context = RequestContext(request)
+    mid = request.GET.get('mid')
+    if request.method == 'POST':
+        form = DeleteNoteForm(request.POST)
+        action = ActionForm(request.POST)
+        if form.is_valid():
+            pid = request.session.get('pid')
+            mid = request.POST['meeting-id']
+            if mid:
+                meeting = Meeting.objects.get(id=mid)
+                action = action.save(commit=False)
+                action.project = Project.objects.get(id=pid)
+                action.by_who = UserProfile.objects.get(user=request.user)
+                action.category = "Notes"
+                action.action_performed = "Deleted"
+                action.title = meeting.title
+                action.save()
+                meeting.delete()
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = MeetingForm()
+    return render_to_response('meeting/delete-meeting.html', {'form': form, 'mid': mid}, context)

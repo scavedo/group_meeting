@@ -1,4 +1,4 @@
-<h4>Notes</h4>
+<h3>Notes</h3>
 
 <div class="panel-group" id="accordion">
     <div id="noteModal"></div>
@@ -18,9 +18,9 @@
                     <div class="panel-body">
                         {{ note.content }}
                         <br/><br/>
-                        <button type="submit" class="btn btn-info">
+                        <a href="/edit-note/{{ note.id }}" class="btn btn-info">
                           <i class="glyphicon glyphicon-pencil"></i> Edit
-                        </button>
+                        </a>
                         <button type="submit" class="btn btn-danger" style="float: right;" onclick="deleteNote( {{ note.id }});">
                           Delete <i class="glyphicon glyphicon-trash"></i>
                         </button>

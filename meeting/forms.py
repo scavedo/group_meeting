@@ -78,3 +78,15 @@ class DeleteNoteForm(forms.ModelForm):
     class Meta:
         model = Note
         fields = []
+
+
+class DeleteFileForm(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = []
+
+
+class DeleteMeetingForm(forms.ModelForm):
+    class Meta:
+        model = Meeting
+        fields = []
