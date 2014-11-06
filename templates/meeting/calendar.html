@@ -15,7 +15,7 @@
                                 "To: " + event.end_date + "<br/>" +
                                 "Description: " + event.description + "<br/>" +
                                 "<hr/>" +
-                                "<button type='submit' class='btn btn-info'><i class='glyphicon glyphicon-pencil'></i> Edit</button>" +
+                                "<a href='/edit-meeting/" + event.id + "' type='submit' class='btn btn-info'><i class='glyphicon glyphicon-pencil'></i> Edit</a>" +
                                 "<button type='submit' class='btn btn-danger' style='float: right;' onclick='deleteMeeting(" + event.id + ");'>Delete <i class='glyphicon glyphicon-trash'></i></button>"
                         $(this).popover({html: true, title: event.title, placement: 'top', container: 'body', content: display}).popover('show');
                         event.shown = true;

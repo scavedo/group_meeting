@@ -170,6 +170,29 @@ def add_meeting(request):
     return render_to_response('meeting/add-meeting.html', {'form': form}, context)
 
 
+def edit_meeting(request, id=None):
+    meeting = Meeting.objects.get(pk=id)
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = MeetingForm(request.POST, instance=meeting)
+        action = ActionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            action = action.save(commit=False)
+            action.project = Project.objects.get(id=meeting.project.id)
+            action.by_who = UserProfile.objects.get(user=request.user)
+            action.category = "Meetings"
+            action.action_performed = "Edited"
+            action.title = meeting.title
+            action.save()
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = MeetingForm(instance=meeting)
+    return render_to_response('meeting/edit-meeting.html', {'form': form}, context)
+
+
 @login_required(login_url='/login/')
 def add_file(request):
     context = RequestContext(request)
@@ -203,6 +226,29 @@ def add_file(request):
     else:
         form = FilesForm()
     return render_to_response('meeting/add-file.html', {'form': form}, context)
+
+
+def edit_file(request, id=None):
+    file = File.objects.get(pk=id)
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = FilesForm(request.POST, instance=file)
+        action = ActionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            action = action.save(commit=False)
+            action.project = Project.objects.get(id=file.project.id)
+            action.by_who = UserProfile.objects.get(user=request.user)
+            action.category = "Notes"
+            action.action_performed = "Edited"
+            action.title = file.title
+            action.save()
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = FilesForm(instance=file)
+    return render_to_response('meeting/edit-file.html', {'form': form}, context)
 
 
 @login_required(login_url='/login/')

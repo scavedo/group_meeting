@@ -9,6 +9,9 @@
             <a href="{{ file.file.url }}" class="btn btn-primary" target="_blank">
                 Download <i class="glyphicon glyphicon-download"></i>
             </a>
+            <a href="/edit-file/{{ file.id }}" class="btn btn-info">
+                <i class="glyphicon glyphicon-pencil"></i> Edit
+            </a>
             <button type="submit" class="btn btn-danger" onclick="deleteFile({{ file.id }});">
                 Delete <i class="glyphicon glyphicon-trash"></i>
             </button>

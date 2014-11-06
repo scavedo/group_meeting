@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load addcss %}
+{% load static %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+    <div class="container login well">
+        <h1>Edit Meeting</h1>
+
+        <form id="meeting_form" method="post" action=".">
+
+            {% csrf_token %}
+
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.label_tag }}
+                {{ field | addcss:"form-control" }}
+                <br/>
+            {% endfor %}
+
+            <br />
+
+            <input class="btn btn-primary" type="submit" name="submit" value="Edit Meeting" />
+        </form>
+    <script type="text/javascript">
+        $(function () {
+            $('#id_date_begin').datetimepicker();
+            $('#id_date_end').datetimepicker();
+            $("#id_date_begin").on("dp.change",function (e) {
+               $('#id_date_end').data("DateTimePicker").setMinDate(e.date);
+            });
+            $("#id_date_end").on("dp.change",function (e) {
+               $('#id_date_begin').data("DateTimePicker").setMaxDate(e.date);
+            });
+        });
+    </script>
+    </div><!-- /container -->
+{% endblock %}
