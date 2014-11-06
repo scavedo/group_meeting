@@ -90,3 +90,9 @@ class DeleteMeetingForm(forms.ModelForm):
     class Meta:
         model = Meeting
         fields = []
+
+
+class FinishProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = []

@@ -28,7 +28,9 @@ urlpatterns = patterns('',
     url(r'^edit-note/(?P<id>\d+)/$', 'meeting.views.edit_note', name='edit-note'),
     url(r'^edit-file/(?P<id>\d+)/$', 'meeting.views.edit_file', name='edit-file'),
     url(r'^edit-meeting/(?P<id>\d+)/$', 'meeting.views.edit_meeting', name='edit-meeting'),
-    url(r'^edit-project/(?P<id>\d+)/$', 'meeting.views.edit_project', name='article_edit')
+    url(r'^edit-project/(?P<id>\d+)/$', 'meeting.views.edit_project', name='edit-project'),
+    url(r'^finish-project/$', 'meeting.views.finish_project', name='finish-project'),
+    url(r'^open-project/$', 'meeting.views.open_project', name='open-project')
 )
 
 if settings.DEBUG:

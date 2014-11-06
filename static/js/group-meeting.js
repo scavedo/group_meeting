@@ -39,3 +39,17 @@ function deleteMeeting(id) {
         $('#myModal').modal("show");
     });
 }
+
+function finishProject(id) {
+    $('#projectModal').load('finish-project/?pid=' + id, function() {
+        $('#projectModal').attr('data-id', id);
+        $('#myModal').modal("show");
+    })
+}
+
+function openProject(id) {
+    $('#projectModal').load('open-project/?pid=' + id, function() {
+        $('#projectModal').attr('data-id', id);
+        $('#myModal').modal("show");
+    })
+}

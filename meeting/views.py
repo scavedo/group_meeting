@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm, AddUserForm, \
-    ActionForm, DeleteNoteForm
+    ActionForm, DeleteNoteForm, FinishProjectForm
 from meeting.models import UserProfile, Project, Note, Meeting, File, Action
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -103,7 +103,7 @@ def create_project(request):
             project.save()
             project.users.add(UserProfile.objects.get(user=request.user))
             project.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/?pid=' + project.id)
         else:
             print form.errors
     else:
@@ -130,7 +130,7 @@ def add_user(request):
                     print "invalid username"
                 project.users.add(UserProfile.objects.get(user=user))
                 project.save()
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/?pid=' + pid)
 
         else:
             print form.errors
@@ -162,7 +162,7 @@ def add_meeting(request):
                 action.action_performed = "Added"
                 action.title = meeting.title
                 action.save()
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/?pid=' + pid)
         else:
             print form.errors
     else:
@@ -185,7 +185,7 @@ def edit_meeting(request, id=None):
             action.action_performed = "Edited"
             action.title = meeting.title
             action.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/?pid=' + meeting.project.id)
         else:
             print form.errors
     else:
@@ -220,7 +220,7 @@ def add_file(request):
                 action.action_performed = "Added"
                 action.title = fileform.title
                 action.save()
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/?pid=' + pid)
         else:
             print form.errors
     else:
@@ -243,7 +243,7 @@ def edit_file(request, id=None):
             action.action_performed = "Edited"
             action.title = file.title
             action.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/?pid=' + file.project.id)
         else:
             print form.errors
     else:
@@ -274,7 +274,7 @@ def add_note(request):
                 action.action_performed = "Added"
                 action.title = note.title
                 action.save()
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/?pid=' + pid)
         else:
             print form.errors
     else:
@@ -297,7 +297,7 @@ def edit_note(request, id=None):
             action.action_performed = "Edited"
             action.title = note.title
             action.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/?pid=' + note.project.id)
         else:
             print form.errors
     else:
@@ -373,7 +373,7 @@ def delete_note(request):
                 action.title = note.title
                 action.save()
                 note.delete()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/?pid=' + pid)
         else:
             print form.errors
     else:
@@ -400,7 +400,7 @@ def delete_file(request):
                 action.title = file.title
                 action.save()
                 file.delete()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/?pid=' + pid)
         else:
             print form.errors
     else:
@@ -427,9 +427,49 @@ def delete_meeting(request):
                 action.title = meeting.title
                 action.save()
                 meeting.delete()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/?pid=' + pid)
         else:
             print form.errors
     else:
         form = MeetingForm()
     return render_to_response('meeting/delete-meeting.html', {'form': form, 'mid': mid}, context)
+
+
+def finish_project(request):
+    context = RequestContext(request)
+    pid = request.GET.get('pid')
+    if request.method == 'POST':
+        form = FinishProjectForm(request.POST)
+        action = ActionForm(request.POST)
+        if form.is_valid():
+            pid = request.session.get('pid')
+            if pid:
+                project = Project.objects.get(id=pid)
+                project.completed = True
+                project.save()
+            return HttpResponseRedirect('/?pid=' + pid)
+        else:
+            print form.errors
+    else:
+        form = FinishProjectForm()
+    return render_to_response('meeting/finish-project.html', {'form': form, 'pid': pid}, context)
+
+
+def open_project(request):
+    context = RequestContext(request)
+    pid = request.GET.get('pid')
+    if request.method == 'POST':
+        form = FinishProjectForm(request.POST)
+        action = ActionForm(request.POST)
+        if form.is_valid():
+            pid = request.session.get('pid')
+            if pid:
+                project = Project.objects.get(id=pid)
+                project.completed = False
+                project.save()
+            return HttpResponseRedirect('/?pid=' + pid)
+        else:
+            print form.errors
+    else:
+        form = MeetingForm()
+    return render_to_response('meeting/open-project.html', {'form': form, 'pid': pid}, context)
