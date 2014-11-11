@@ -23,7 +23,7 @@ class UserProfileForm(forms.ModelForm):
 
 class ProjectForm(forms.ModelForm):
     name = forms.CharField(help_text="Please enter a project name.")
-    due_date = forms.DateTimeField(input_formats=['%m/%d/%Y %H:%M %p'])
+    due_date = forms.DateTimeField(widget=forms.DateTimeInput(format='%m/%d/%Y %H:%M %p'), input_formats=['%m/%d/%Y %H:%M %p'], localize=True)
 
     class Meta:
         model = Project
@@ -50,8 +50,8 @@ class FilesForm(forms.ModelForm):
 
 class MeetingForm(forms.ModelForm):
     title = forms.CharField(help_text="Please enter a title for your meeting.")
-    date_begin = forms.DateTimeField(input_formats=['%m/%d/%Y %H:%M %p'])
-    date_end = forms.DateTimeField(input_formats=['%m/%d/%Y %H:%M %p'])
+    date_begin = forms.DateTimeField(widget=forms.DateTimeInput(format='%m/%d/%Y %H:%M %p'), input_formats=['%m/%d/%Y %H:%M %p'], localize=True)
+    date_end = forms.DateTimeField(widget=forms.DateTimeInput(format='%m/%d/%Y %H:%M %p'), input_formats=['%m/%d/%Y %H:%M %p'], localize=True)
     place = forms.CharField(help_text="Enter the location.")
     description = forms.Textarea()
 

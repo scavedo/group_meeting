@@ -185,7 +185,7 @@ def edit_meeting(request, id=None):
             action.action_performed = "Edited"
             action.title = meeting.title
             action.save()
-            return HttpResponseRedirect('/?pid=' + meeting.project.id)
+            return HttpResponseRedirect('/?pid=' + str(meeting.project.id))
         else:
             print form.errors
     else:
@@ -243,7 +243,7 @@ def edit_file(request, id=None):
             action.action_performed = "Edited"
             action.title = file.title
             action.save()
-            return HttpResponseRedirect('/?pid=' + file.project.id)
+            return HttpResponseRedirect('/?pid=' + str(file.project.id))
         else:
             print form.errors
     else:
@@ -297,7 +297,7 @@ def edit_note(request, id=None):
             action.action_performed = "Edited"
             action.title = note.title
             action.save()
-            return HttpResponseRedirect('/?pid=' + note.project.id)
+            return HttpResponseRedirect('/?pid=' + str(note.project.id))
         else:
             print form.errors
     else:
@@ -504,7 +504,7 @@ def edit_project(request, id=None):
             action.by_who = UserProfile.objects.get(user=request.user)
             action.category = "Project"
             action.action_performed = "Edited"
-            action.title = project.title
+            action.title = project.name
             action.save()
             return HttpResponseRedirect('/?pid=' + str(project.id))
         else:

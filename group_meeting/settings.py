@@ -88,6 +88,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     # "meeting.processors.base",
 )
 
+DATETIME_INPUT_FORMATS = (
+    '%m/%d/%Y %H:%M %p',
+)
+
+USE_L10N = True
+
 ROOT_URLCONF = 'group_meeting.urls'
 
 WSGI_APPLICATION = 'group_meeting.wsgi.application'
