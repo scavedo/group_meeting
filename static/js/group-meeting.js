@@ -53,3 +53,10 @@ function openProject(id) {
         $('#myModal').modal("show");
     })
 }
+
+function deleteProject(id) {
+    $('#projectModal').load('delete-project/?pid=' + id, function() {
+        $('#projectModal').attr('data-id', id);
+        $('#myModal').modal("show");
+    })
+}

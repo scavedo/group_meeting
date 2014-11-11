@@ -96,3 +96,9 @@ class FinishProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = []
+
+
+class DeleteProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = []

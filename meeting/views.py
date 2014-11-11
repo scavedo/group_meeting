@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from meeting.forms import UserForm, UserProfileForm, ProjectForm, NotesForm, FilesForm, MeetingForm, AddUserForm, \
-    ActionForm, DeleteNoteForm, FinishProjectForm
+    ActionForm, DeleteNoteForm, FinishProjectForm, DeleteProjectForm
 from meeting.models import UserProfile, Project, Note, Meeting, File, Action
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
@@ -103,7 +103,7 @@ def create_project(request):
             project.save()
             project.users.add(UserProfile.objects.get(user=request.user))
             project.save()
-            return HttpResponseRedirect('/?pid=' + project.id)
+            return HttpResponseRedirect('/?pid=' + str(project.id))
         else:
             print form.errors
     else:
@@ -305,8 +305,6 @@ def edit_note(request, id=None):
     return render_to_response('meeting/edit-note.html', {'form': form}, context)
 
 
-
-
 def calendar(request):
     pid = request.GET.get('pid')
     if pid:
@@ -473,3 +471,44 @@ def open_project(request):
     else:
         form = MeetingForm()
     return render_to_response('meeting/open-project.html', {'form': form, 'pid': pid}, context)
+
+
+def delete_project(request):
+    context = RequestContext(request)
+    pid = request.GET.get('pid')
+    if request.method == 'POST':
+        form = DeleteProjectForm(request.POST)
+        if form.is_valid():
+            pid = request.session.get('pid')
+            if pid:
+                project = Project.objects.get(id=pid)
+                project.delete()
+            return HttpResponseRedirect('/')
+        else:
+            print form.errors
+    else:
+        form = DeleteProjectForm()
+    return render_to_response('meeting/delete-project.html', {'form': form, 'pid': pid}, context)
+
+
+def edit_project(request, id=None):
+    note = Note.objects.get(pk=id)
+    context = RequestContext(request)
+    if request.method == 'POST':
+        form = NotesForm(request.POST, instance=note)
+        action = ActionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            action = action.save(commit=False)
+            action.project = Project.objects.get(id=note.project.id)
+            action.by_who = UserProfile.objects.get(user=request.user)
+            action.category = "Notes"
+            action.action_performed = "Edited"
+            action.title = note.title
+            action.save()
+            return HttpResponseRedirect('/?pid=' + note.project.id)
+        else:
+            print form.errors
+    else:
+        form = NotesForm(instance=note)
+    return render_to_response('meeting/edit-note.html', {'form': form}, context)
