@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load addcss %}
+{% load static %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+    <div class="container login well">
+        <h1>Edit Project</h1>
+
+        <form id="project_form" method="post" action=".">
+
+            {% csrf_token %}
+
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.label_tag }}
+                {{ field | addcss:"form-control"}}
+                <br/>
+            {% endfor %}
+
+            <br />
+
+            <input class="btn btn-primary" type="submit" name="submit" value="Edit Project" />
+        </form>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#id_due_date').datetimepicker();
+        });
+    </script>
+
+    </div><!-- /container -->
+{% endblock %}

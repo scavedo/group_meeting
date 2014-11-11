@@ -75,7 +75,7 @@
                                             Open <i class="glyphicon glyphicon-folder-open"></i>
                                         </button>
                                     {% endif %}
-                                    <a href="#" class="btn btn-info" style="display: inline-block; float: none;">
+                                    <a href="/edit-project/{{ project.id }}" class="btn btn-info" style="display: inline-block; float: none;">
                                         Edit <i class="glyphicon glyphicon-pencil"></i>
                                     </a>
                                     <button type="submit" class="btn btn-danger" style="display: inline-block; float: none;" onclick="deleteProject( {{ project.id }});">

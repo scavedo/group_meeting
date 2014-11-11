@@ -492,23 +492,23 @@ def delete_project(request):
 
 
 def edit_project(request, id=None):
-    note = Note.objects.get(pk=id)
+    project = Project.objects.get(pk=id)
     context = RequestContext(request)
     if request.method == 'POST':
-        form = NotesForm(request.POST, instance=note)
+        form = ProjectForm(request.POST, instance=project)
         action = ActionForm(request.POST)
         if form.is_valid():
             form.save()
             action = action.save(commit=False)
-            action.project = Project.objects.get(id=note.project.id)
+            action.project = Project.objects.get(id=project.id)
             action.by_who = UserProfile.objects.get(user=request.user)
-            action.category = "Notes"
+            action.category = "Project"
             action.action_performed = "Edited"
-            action.title = note.title
+            action.title = project.title
             action.save()
-            return HttpResponseRedirect('/?pid=' + note.project.id)
+            return HttpResponseRedirect('/?pid=' + str(project.id))
         else:
             print form.errors
     else:
-        form = NotesForm(instance=note)
-    return render_to_response('meeting/edit-note.html', {'form': form}, context)
+        form = ProjectForm(instance=project)
+    return render_to_response('meeting/edit-project.html', {'form': form}, context)
