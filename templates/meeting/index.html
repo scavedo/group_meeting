@@ -105,15 +105,15 @@
                                         {% else %}
                                             {% for action in actions %}
                                                 {% if action.action_performed == "Added" %}
-                                                    <p>{{ action.by_who }} <span class="text-success">added</span> {{ action.title }} to
+                                                    <p>{{ action.by_who }} <span class="text-success">added</span> <i>{{ action.title }}</i> to
                                                         {{ action.category }} on {{ action.date_occurred }}
                                                     </p>
                                                     {% elif action.action_performed == "Deleted" %}
-                                                       <p>{{ action.by_who }} <span class="text-danger">deleted</span> {{ action.title }} from
+                                                       <p>{{ action.by_who }} <span class="text-danger">deleted</span> <i>{{ action.title }}</i> from
                                                         {{ action.category }} on {{ action.date_occurred }}
                                                     </p>
                                                     {% elif action.action_performed == "Edited" %}
-                                                       <p>{{ action.by_who }} <span class="text-info">edited</span> {{ action.title }} in
+                                                       <p>{{ action.by_who }} <span class="text-info">edited</span> <i>{{ action.title }}</i> in
                                                         {{ action.category }} on {{ action.date_occurred }}
                                                 </p>
                                                 {% endif %}
