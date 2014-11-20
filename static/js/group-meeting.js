@@ -1,5 +1,5 @@
-function changeProject(targetId, contentId, projectId) {
-    $('#' + targetId).load("/?pid=" + projectId + " #" + contentId);
+function changeProject(projectId) {
+    $('#project').load("/?pid=" + projectId + " #project-content");
 }
 
 function loadCalendar(projectId) {

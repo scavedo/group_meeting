@@ -25,6 +25,8 @@ def index(request):
     else:
         display_project = None
         actions = None
+
+    print pid
     return render(request, 'meeting/index.html', {
         'projects': projects,
         'active_projects': active_projects,
@@ -103,7 +105,7 @@ def create_project(request):
             project.save()
             project.users.add(UserProfile.objects.get(user=request.user))
             project.save()
-            return HttpResponseRedirect('/?pid=' + str(project.id))
+            return HttpResponseRedirect('/')
         else:
             print form.errors
     else:
@@ -130,7 +132,7 @@ def add_user(request):
                     print "invalid username"
                 project.users.add(UserProfile.objects.get(user=user))
                 project.save()
-                return HttpResponseRedirect('/?pid=' + pid)
+                return HttpResponseRedirect('/?pid=' + str(project.id))
 
         else:
             print form.errors
@@ -158,7 +160,7 @@ def add_meeting(request):
                 action = action.save(commit=False)
                 action.project = Project.objects.get(id=pid)
                 action.by_who = UserProfile.objects.get(user=request.user)
-                action.category = "Meetings"
+                action.category = "Calendar"
                 action.action_performed = "Added"
                 action.title = meeting.title
                 action.save()
@@ -181,7 +183,7 @@ def edit_meeting(request, id=None):
             action = action.save(commit=False)
             action.project = Project.objects.get(id=meeting.project.id)
             action.by_who = UserProfile.objects.get(user=request.user)
-            action.category = "Meetings"
+            action.category = "Calendar"
             action.action_performed = "Edited"
             action.title = meeting.title
             action.save()
@@ -371,7 +373,7 @@ def delete_note(request):
                 action.title = note.title
                 action.save()
                 note.delete()
-            return HttpResponseRedirect('/?pid=' + pid)
+            return HttpResponseRedirect('/?pid=' + str(note.project.id))
         else:
             print form.errors
     else:
@@ -398,7 +400,7 @@ def delete_file(request):
                 action.title = file.title
                 action.save()
                 file.delete()
-            return HttpResponseRedirect('/?pid=' + pid)
+            return HttpResponseRedirect('/?pid=' + str(file.project.id))
         else:
             print form.errors
     else:
@@ -420,12 +422,12 @@ def delete_meeting(request):
                 action = action.save(commit=False)
                 action.project = Project.objects.get(id=pid)
                 action.by_who = UserProfile.objects.get(user=request.user)
-                action.category = "Notes"
+                action.category = "Calendar"
                 action.action_performed = "Deleted"
                 action.title = meeting.title
                 action.save()
                 meeting.delete()
-            return HttpResponseRedirect('/?pid=' + pid)
+            return HttpResponseRedirect('/?pid=' + str(meeting.project.id))
         else:
             print form.errors
     else:

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime, date
+from django.utils import timezone
 
 
 DEFAULT_USER_ID = 1
@@ -24,11 +25,6 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.name
-
-    def is_past_due(self):
-        if date.today() > self.due_date:
-            return True
-        return False
 
 
 class Note(models.Model):
@@ -71,10 +67,12 @@ class Meeting(models.Model):
         return self.title
 
     def begin_format(self):
-        return '%s' % self.date_begin.strftime('%Y-%m-%dT%H:%M:%S')
+        date_begin = timezone.localtime(self.date_begin)
+        return '%s' % date_begin.strftime('%Y-%m-%dT%H:%M:%S')
 
     def end_format(self):
-        return '%s' % self.date_end.strftime('%Y-%m-%dT%H:%M:%S')
+        date_emd = timezone.localtime(self.date_end)
+        return '%s' % date_end.strftime('%Y-%m-%dT%H:%M:%S')
 
 
 class Action(models.Model):

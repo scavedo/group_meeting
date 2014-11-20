@@ -19,7 +19,7 @@
                                 </a>
                                    <div id="collapse-active" class="panel-collapse collapse in">
                                     {% for project in active_projects %}
-                                        <a class="list-group-item" href="" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a></li>
+                                        <a class="list-group-item" href="" onclick="changeProject({{ project.id }}); return false;">{{ project.name }}</a></li>
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -30,7 +30,7 @@
                                 </a>
                                 <div id="collapse-completed" class="panel-collapse collapse in">
                                     {% for project in completed_projects %}
-                                        <a class="list-group-item" href="" onclick="changeProject('project', 'project-content', {{ project.id }}); return false;">{{ project.name }}</a></li>
+                                        <a class="list-group-item" href="" onclick="changeProject({{ project.id }}); return false;">{{ project.name }}</a></li>
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -62,9 +62,7 @@
                                         test({{ project.id }});
                                     </script>
                                     <h1 style="display: inline-block; padding-right: 25px;">{{ project.name }}
-                                      {% if project.is_past_due %}<small class="text-danger">{% else %}<small>{% endif %}
-                                        Due: {{ project.due_date }}
-                                      </small>
+                                      <small>Due: {{ project.due_date }}</small>
                                     </h1>
                                     {% if not project.completed %}
                                         <button type="submit" class="btn btn-success" style="display: inline-block; float: none;" onclick="finishProject( {{ project.id }});">

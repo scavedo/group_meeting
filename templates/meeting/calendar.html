@@ -30,6 +30,8 @@
                 defaultDate: Date(),
                 editable: false,
                 eventLimit: true,
+                timezone: 'America/Chicago',
+                ignoreTimezone: false,
                 events: [
                     {% for meeting in meetings %}
                         {
@@ -39,13 +41,14 @@
                             id: '{{ meeting.id }}',
                             description: '{{ meeting.description }}',
                             place: '{{ meeting.place }}',
-                            start_date: '{{ meeting.date_begin }}',
+                            start_date: '{{ meeting.begin_format }}',
                             end_date: '{{ meeting.date_end }}',
                             shown: false
                         }{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 ]
             });
+
         });
     </script>
 
